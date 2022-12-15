@@ -16,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/andremelinski/curso-manguinho/issues"
   },
-  "homepage": "https://github.com/andremelinski/curso-manguinho#readme"
+  "homepage": "https://github.com/andremelinski/curso-manguinho#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.46.1",
+    "@typescript-eslint/parser": "^5.46.1",
+    "eslint": "^8.29.0",
+    "lint-staged": "^13.1.0"
+  },
+  "dependencies": {
+    "husky": "^8.0.2"
+  }
 }
