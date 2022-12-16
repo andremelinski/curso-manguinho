@@ -25,10 +25,10 @@
 		"eslint": "^8.29.0",
 		"jest": "^29.3.1",
 		"lint-staged": "^13.1.0",
-		"ts-jest": "^29.0.3"
+		"ts-jest": "^29.0.3",
+		"ts-node": "^10.9.1"
 	},
 	"dependencies": {
-		"husky": "^8.0.2",
-		"ts-node": "^10.9.1"
+		"husky": "^8.0.2"
 	}
 }
