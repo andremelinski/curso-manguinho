@@ -8,5 +8,6 @@ export class SignUpController {
 		if (!httRequest.body.email) {
 			return { statusCode: 400, body: new Error('Missing param: email') };
 		}
+		return { statusCode: 200, body: 'ok' };
 	}
 }
