@@ -12,7 +12,6 @@ export class SignUpController implements IController {
 		this.addAccount = addAccountModel;
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async handle(httpRequest: HttpRequest): Promise<HttpReponse> {
 		try {
 			const requiredFields = ['email', 'name', 'password', 'passwordConfirmation'];
