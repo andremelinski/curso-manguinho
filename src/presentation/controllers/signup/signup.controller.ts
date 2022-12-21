@@ -43,7 +43,7 @@ export class SignUpController implements IController {
 
 			return ok(newAccount);
 		} catch (error) {
-			// console.error(error);
+			console.error(error);
 			return serverError();
 		}
 	}
