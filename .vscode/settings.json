@@ -1,0 +1,7 @@
+{
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
+	"typescript.format.insertSpaceBeforeFunctionParenthesis": false,
+	"prettier.useTabs": true,
+	"javascript.format.insertSpaceAfterSemicolonInForStatements": false,
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": true
+}
