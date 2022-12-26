@@ -11,7 +11,6 @@ export default class DbAddAccount implements IAddAccount {
 		this.addAccountRpository = addAccountRpository;
 	}
 
-	// eslint-disable-next-line require-await
 	async add(accountData: IAddAccountModel): Promise<IAccountModel> {
 		const hashedPassword = await this.encrypter.encrypt(accountData.password);
 
@@ -20,8 +19,6 @@ export default class DbAddAccount implements IAddAccount {
 			password: hashedPassword,
 		});
 
-		return new Promise((resolve) => {
-			return resolve(newAccount);
-		});
+		return newAccount;
 	}
 }

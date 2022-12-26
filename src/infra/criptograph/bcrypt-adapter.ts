@@ -12,6 +12,6 @@ export default class BcryptAdapter implements IEncrypter {
 	async encrypt(value: string): Promise<string> {
 		const hashedValue = await bcrypt.hash(value, this.salt);
 
-		return null;
+		return hashedValue;
 	}
 }

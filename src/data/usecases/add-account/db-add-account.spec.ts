@@ -89,7 +89,7 @@ describe('DbAddAccount UseCase', () => {
 		await expect(promiseAddccountDb).rejects.toThrow();
 	});
 
-	test('should call Encrypted with correct password', async () => {
+	test('should call DbAddAccount with correct information', async () => {
 		const addSpy = jest.spyOn(addAccountRepositoryStub, 'add');
 		const accountData = {
 			name: 'valid_name',
