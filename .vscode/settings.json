@@ -3,5 +3,8 @@
 	"typescript.format.insertSpaceBeforeFunctionParenthesis": false,
 	"prettier.useTabs": true,
 	"javascript.format.insertSpaceAfterSemicolonInForStatements": false,
-	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": true
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": true,
+	"editor.formatOnType": true,
+	"editor.formatOnSave": false,
+	"editor.formatOnPaste": true
 }
