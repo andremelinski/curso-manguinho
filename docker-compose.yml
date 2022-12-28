@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+    # ts-node:
+    #     container_name: ts-node
+    #     build:
+    #         context: .
+    #         target: development
+    #         dockerfile: Dockerfile
+    #     ports:
+    #         - '5050:5050'
+    #     volumes:
+    #         - ./src:/home/node/app/src
+    #         - ./nodemon.json:/home/node/app/nodemon.json
+    #     entrypoint: sh -c "npm run start:dev"
+    db:
+      container_name: mongoDB
+      image: mongo:latest
+      command: mongod --auth
+      restart: always
+      ports:
+        - 27017:27017
+      environment:
+        - MONGO_INITDB_ROOT_USERNAME=admin
+        - MONGO_INITDB_ROOT_PASSWORD=admin

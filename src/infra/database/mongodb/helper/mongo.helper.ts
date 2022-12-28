@@ -15,7 +15,9 @@ export const MongoHelper = {
 		return this.connection.db().collection(name);
 	},
 	// because mongo returns only an _id we need to return the full info to follow the interface requirements
-	mapper(collectionInfo: any, mongoId: any) {
-		return { ...collectionInfo, id: mongoId.toString() };
+	mapper(collectionInfo: any) {
+		const { _id, ...accountWithoutId } = collectionInfo;
+
+		return { ...accountWithoutId, id: _id };
 	},
 };
