@@ -9,7 +9,7 @@ describe('Sign up Routes', () => {
 		await MongoHelper.connect(process.env.MONGO_URL);
 	});
 	beforeEach(async () => {
-		const accountCollection = MongoHelper.getCollection('accounts');
+		const accountCollection = await MongoHelper.getCollection('accounts');
 
 		await accountCollection.deleteMany({});
 	});
