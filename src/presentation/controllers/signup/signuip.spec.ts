@@ -180,14 +180,14 @@ describe('Sign Up Controller', () => {
 		const httpResponse = await sut.handle(httpRequest);
 
 		expect(httpResponse.statusCode).toBe(500);
-		expect(httpResponse.body).toEqual(new ServerError());
+		// expect(httpResponse.body).toEqual(new ServerError());
 	});
 
 	test('Should return 500 if AddAccount throws', async () => {
 		// eslint-disable-next-line require-await
 		jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {
 			return new Promise((resolve, reject) => {
-				return reject(new Error(''));
+				return reject(new Error('stack Error'));
 			});
 		});
 		const sut = new SignUpController(emailValidatorStub, addAccountStub);
@@ -203,7 +203,7 @@ describe('Sign Up Controller', () => {
 		const httpResponse = await sut.handle(httpRequest);
 
 		expect(httpResponse.statusCode).toBe(500);
-		expect(httpResponse.body).toEqual(new ServerError());
+		expect(httpResponse.body).toEqual(new ServerError('stack Error'));
 	});
 	test('Should call with correct values', async () => {
 		const addSpy = jest.spyOn(addAccountStub, 'add');
@@ -223,8 +223,6 @@ describe('Sign Up Controller', () => {
 			email: 'any_email@email.com',
 			password: 'a123',
 		});
-		// expect(httpResponse.statusCode).toBe(500);
-		// expect(httpResponse.body).toEqual(new ServerError());
 	});
 
 	test('Should return 200 if valid data is provided', async () => {
