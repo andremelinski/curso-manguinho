@@ -8,7 +8,7 @@ export class ValidationComposite implements IValidation {
 	}
 
 	// eslint-disable-next-line consistent-return
-	validate(object: any): Error | null {
+	validate(object: any): Error | undefined {
 		for (const validation of this.validations) {
 			const error = validation.validate(object);
 
