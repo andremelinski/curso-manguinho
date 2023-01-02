@@ -23,10 +23,11 @@ export default class LoginController implements IController {
 			if (validationError) {
 				return badRequest(validationError);
 			}
-			const authToken = await this.authentication.auth(
-				accountInfo.email,
-				accountInfo.password
-			);
+			const toAuth = {
+				email: accountInfo.email,
+				password: accountInfo.password
+			};
+			const authToken = await this.authentication.auth(toAuth);
 
 			if (!authToken) {
 				return unauthorized();

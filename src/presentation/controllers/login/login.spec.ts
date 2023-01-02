@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { MissingParamError } from '../../errors';
 import { badRequest, serverError, unauthorized } from '../../helper/http-helper';
-import { HttpReponse, HttpRequest, IAuthentication, IValidation } from './login-protocols';
+import { HttpReponse, HttpRequest, IAuthentication, IAuthenticationModel, IValidation } from './login-protocols';
 import LoginController from './login.controller';
 
 const correctHttpRequest: HttpRequest = {
@@ -26,8 +26,8 @@ const makeValidation = (): IValidation => {
 const makeAuthentication = (): IAuthentication => {
 	class AuthenticationStub implements IAuthentication {
 		// eslint-disable-next-line require-await
-		async auth(email: string, password: string): Promise<string> {
-			return new Promise(resolve => {
+		async auth(authentication: IAuthenticationModel): Promise<string> {
+			return new Promise((resolve) => {
 				return resolve('any_token');
 			});
 		}
@@ -63,9 +63,8 @@ describe('Login Controller', () => {
 		const addSpy = jest.spyOn(makeAuthenticationStub, 'auth');
 
 		await sut.handle(correctHttpRequest);
-		const { email, password } = correctHttpRequest.body;
 
-		expect(addSpy).toHaveBeenCalledWith(email, password);
+		expect(addSpy).toHaveBeenCalledWith(correctHttpRequest.body);
 	});
 
 	test('Should return 401 if invalid credentials', async () => {
