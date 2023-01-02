@@ -1,8 +1,9 @@
 /* eslint-disable max-classes-per-file */
+import { IValidation } from '../../../../presentation/interfaces';
 import { InvalidParamError } from '../../../errors';
 import { MissingParamError } from '../../../errors/missing-params.error';
 import { ValidationComposite } from '../validation.composite';
-import { IValidation } from '../validation.interface';
+
 
 const makeRequiredFieldValidation = (): IValidation => {
 	class RequiredFieldValidationStub implements IValidation {

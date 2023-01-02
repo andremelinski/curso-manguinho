@@ -1,11 +1,12 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-classes-per-file */
-import { ServerError } from '../../errors';
-import { IAccountModel, IAddAccount, IAddAccountModel, IValidation } from './signup-protocols';
+import { MissingParamError, ServerError } from '../../errors';
+import { badRequest } from '../../helper/http-helper';
+import { HttpReponse, HttpRequest, IAccountModel, IAddAccount, IAddAccountModel, IValidation } from './signup-protocols';
 import { SignUpController } from './signup.controller';
 
-const correctHttpRequest = {
+const correctHttpRequest: HttpRequest = {
 	body: {
 		name: 'andre',
 		email: 'any_email@email.com',
@@ -69,6 +70,17 @@ describe('Sign Up Controller', () => {
 		({ sut, addAccountStub, validationStub } = makeSut());
 	});
 
+	test('Should call with correct values', async () => {
+		const addSpy = jest.spyOn(addAccountStub, 'add');
+
+		await sut.handle(correctHttpRequest);
+
+		expect(addSpy).toHaveBeenCalledWith({
+			name: 'andre',
+			email: 'any_email@email.com',
+			password: 'a123',
+		});
+	});
 	test('Should return 500 if AddAccount throws', async () => {
 		// eslint-disable-next-line require-await
 		jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {
@@ -81,28 +93,25 @@ describe('Sign Up Controller', () => {
 		expect(httpResponse.statusCode).toBe(500);
 		expect(httpResponse.body).toEqual(new ServerError('stack Error'));
 	});
-	test('Should call with correct values', async () => {
-		const addSpy = jest.spyOn(addAccountStub, 'add');
-
-		await sut.handle(correctHttpRequest);
-
-		expect(addSpy).toHaveBeenCalledWith({
-			name: 'andre',
-			email: 'any_email@email.com',
-			password: 'a123',
-		});
-	});
 
 	test('Should return 200 if valid data is provided', async () => {
-		const httpResponse = await sut.handle(correctHttpRequest);
+		const httpResponse: HttpReponse = await sut.handle(correctHttpRequest);
 
 		expect(httpResponse.statusCode).toBe(200);
+		expect(httpResponse.body.id).toBeTruthy();
 	});
-	test('Should return 200 if valid data is provided', async () => {
+	test('Should call Validation with correct value', async () => {
 		const isValidSpy = jest.spyOn(validationStub, 'validate');
 
 		await sut.handle(correctHttpRequest);
 
 		expect(isValidSpy).toHaveBeenCalledWith(correctHttpRequest.body);
+	});
+
+	test('Should return 400 if validation return an error', async () => {
+		jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new MissingParamError('any_field'));
+		const httpResponse = await sut.handle(correctHttpRequest);
+
+		expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')));
 	});
 });

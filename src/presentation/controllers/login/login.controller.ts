@@ -1,37 +1,32 @@
-import { InvalidParamError, MissingParamError } from '../../errors';
+import { IValidation } from '../../../presentation/interfaces';
 import { badRequest, ok, serverError, unauthorized } from '../../helper/http-helper';
-import { HttpReponse, HttpRequest, IAuthentication, IController, IEmailValidator } from './login-protocols';
+import { HttpReponse, HttpRequest, IAuthentication, IController } from './login-protocols';
 
 
 export default class LoginController implements IController {
 	private readonly authentication: IAuthentication;
 
-	private readonly emailValidator: IEmailValidator;
 
-	constructor(emailValidator: IEmailValidator, authentication: IAuthentication) {
-		this.emailValidator = emailValidator;
+	private readonly validation: IValidation;
+
+	constructor(authentication: IAuthentication, validation: IValidation) {
 		this.authentication = authentication;
+		this.validation = validation;
 	}
 
 	// eslint-disable-next-line require-await
 	async handle(httpRequest: HttpRequest): Promise<HttpReponse> {
 		try {
-			const requiredFields = ['email', 'password',];
-
 			const accountInfo = httpRequest.body;
+			const validationError = this.validation.validate(accountInfo);
 
-			for (const field of requiredFields) {
-				if (!accountInfo[field]) {
-					return badRequest(new MissingParamError(field));
-				}
+			if (validationError) {
+				return badRequest(validationError);
 			}
-
-			const isValid = this.emailValidator.isValid(accountInfo.email);
-
-			if (!isValid) {
-				return badRequest(new InvalidParamError('email'));
-			}
-			const authToken = await this.authentication.auth(accountInfo.email, accountInfo.password);
+			const authToken = await this.authentication.auth(
+				accountInfo.email,
+				accountInfo.password
+			);
 
 			if (!authToken) {
 				return unauthorized();

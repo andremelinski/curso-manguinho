@@ -1,5 +1,6 @@
+import { IValidation } from '../../../presentation/interfaces';
 import { MissingParamError } from '../../errors';
-import { IValidation } from './validation.interface';
+
 
 export class RequiredFieldValidation implements IValidation {
 	private readonly requiredField;

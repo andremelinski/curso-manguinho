@@ -2,7 +2,7 @@
 /* eslint-disable max-nested-callbacks */
 import { InvalidParamError } from '../../../errors';
 import { IEmailValidator } from '../../../interfaces';
-import EmailValidation from '../mail-validator.validation';
+import { EmailValidation } from '../mail-validator.validation';
 
 
 const bodyRequest = {

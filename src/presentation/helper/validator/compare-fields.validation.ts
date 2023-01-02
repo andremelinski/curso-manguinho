@@ -1,8 +1,8 @@
+import { IValidation } from '../../../presentation/interfaces';
 import { InvalidParamError } from '../../errors';
-import { IValidation } from './validation.interface';
 
 
-export default class CompareFieldValidation implements IValidation {
+export class CompareFieldValidation implements IValidation {
 	private readonly fieldName;
 
 	private readonly fieldToCompare;
