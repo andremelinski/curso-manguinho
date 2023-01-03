@@ -1,4 +1,4 @@
-export * from '../../interfaces/encrypter.interface';
+export * from '../../interfaces/criptography/encrypter.interface';
 export * from '../../../domain/interfaces/model/accountModel.interfae';
 export * from '../../../domain/interfaces/usecases/addAccount.interface';
-export * from '../../interfaces/addAccountRepository.interface';
+export * from '../../interfaces/db/addAccountRepository.interface';
