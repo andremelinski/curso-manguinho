@@ -1,17 +1,17 @@
 /* eslint-disable max-classes-per-file */
 import DbAddAccount from './db-add-account';
-import { IAccountModel, IAddAccountModel, IAddAccountRepository, IEncrypter } from './db-add-account-protocols';
+import { IAccountModel, IAddAccountModel, IAddAccountRepository, IHasher } from './db-add-account-protocols';
 
 /* eslint-disable require-await */
-const encrypter = (): IEncrypter => {
-	class EncrypterStub implements IEncrypter {
-		async encrypt(): Promise<string> {
+const makeHash = (): IHasher => {
+	class HashStub implements IHasher {
+		async hash(): Promise<string> {
 			return new Promise((resolve) => {
 				resolve('hashed_password');
 			});
 		}
 	}
-	return new EncrypterStub();
+	return new HashStub();
 };
 
 const makeAddAccountRepository = (): IAddAccountRepository => {
@@ -33,33 +33,33 @@ const makeAddAccountRepository = (): IAddAccountRepository => {
 };
 
 interface SutTypes {
-	encrypterStub: IEncrypter;
+	hasherStub: IHasher;
 	sut: DbAddAccount;
 	addAccountRepositoryStub: IAddAccountRepository;
 }
 const makeSut = (): SutTypes => {
-	const encrypterStub = encrypter();
+	const hasherStub = makeHash();
 	const addAccountRepositoryStub = makeAddAccountRepository();
 
-	const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub);
+	const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub);
 
 	return {
-		encrypterStub,
+		hasherStub,
 		sut,
 		addAccountRepositoryStub,
 	};
 };
 
 describe('DbAddAccount UseCase', () => {
-	let encrypterStub: IEncrypter;
+	let hasherStub: IHasher;
 	let sut: DbAddAccount;
 	let addAccountRepositoryStub: IAddAccountRepository;
 
 	beforeEach(() => {
-		({ sut, encrypterStub, addAccountRepositoryStub } = makeSut());
+		({ sut, hasherStub, addAccountRepositoryStub } = makeSut());
 	});
 	test('should call Encrypted with correct password', async () => {
-		const encryptSpy = jest.spyOn(encrypterStub, 'encrypt');
+		const encryptSpy = jest.spyOn(hasherStub, 'hash');
 
 		const accountData = {
 			name: 'valid_name',
@@ -72,7 +72,7 @@ describe('DbAddAccount UseCase', () => {
 	});
 	// teste que evita a adicao de um try catch no Encrypter e errosera tratado na camada se signUp como erro 500
 	test('should throw Error when Encrypter throws', async () => {
-		jest.spyOn(encrypterStub, 'encrypt').mockReturnValueOnce(
+		jest.spyOn(hasherStub, 'hash').mockReturnValueOnce(
 			new Promise((resolve, reject) => {
 				return reject(new Error());
 			})

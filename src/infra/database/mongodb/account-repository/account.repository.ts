@@ -1,4 +1,4 @@
-import { IAddAccountRepository } from '../../../../data/interfaces/addAccountRepository.interface';
+import { IAddAccountRepository } from '../../../../data/interfaces/db/addAccountRepository.interface';
 import { IAccountModel } from '../../../../domain/interfaces/model/accountModel.interfae';
 import { IAddAccountModel } from '../../../../domain/interfaces/usecases/addAccount.interface';
 import { MongoHelper } from '../helper/mongo.helper';
