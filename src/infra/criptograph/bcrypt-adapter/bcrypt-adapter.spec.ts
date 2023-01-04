@@ -1,3 +1,4 @@
+/* eslint-disable require-await */
 /* eslint-disable max-nested-callbacks */
 import bcrypt from 'bcrypt';
 
@@ -7,13 +8,12 @@ const salt = 12;
 
 jest.mock('bcrypt', () => {
 	return {
-		// eslint-disable-next-line require-await
 		async hash(): Promise<string> {
 			return new Promise((resolve) => {
 				return resolve('hashed_value');
 			});
 		},
-		// eslint-disable-next-line require-await
+
 		async compare(): Promise<boolean> {
 			return new Promise((resolve) => {
 				return resolve(true);
@@ -45,7 +45,6 @@ describe('Bcrypt Adapter', () => {
 	});
 
 	test('Should throws if bcrypt.hash throws', async () => {
-		// eslint-disable-next-line max-nested-callbacks
 		jest.spyOn(bcrypt, 'hash').mockImplementationOnce(() => {
 			throw new Error();
 		});

@@ -54,10 +54,8 @@ const makeUpdateAccessTokenRepository = (): IUpdateAccessTokenRepository => {
 
 const makeEncrypter = (): IEncrypter => {
 	class EncrypterStub implements IEncrypter {
-		encrypt(userId: string): Promise<string> {
-			return new Promise((resolve) => {
-				return resolve('token');
-			});
+		encrypt(value: string): string {
+			return 'token';
 		}
 	}
 	return new EncrypterStub();
@@ -174,11 +172,9 @@ describe('DbAddAccount UseCase', () => {
 
 	test('should throw if encrypter throws', async () => {
 		// eslint-disable-next-line require-await
-		jest.spyOn(encrypterStub, 'encrypt').mockReturnValueOnce(
-			new Promise((resolve, reject) => {
-				return reject(new Error());
-			})
-		);
+		jest.spyOn(encrypterStub, 'encrypt').mockImplementationOnce(() => {
+			throw new Error();
+		});
 
 		const promise = sut.auth(accountData);
 
