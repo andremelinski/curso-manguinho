@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 
-import { IEncryptCompare } from '../../../data/interfaces/criptography/encrypterComparer.interface';
-import { IEncrypter } from '../../../data/interfaces/criptography/encrypterGenerator.interface';
+import { IEncryptCompare } from '../../../data/interfaces/criptography/token/encrypterComparer.interface';
+import { IEncrypter } from '../../../data/interfaces/criptography/token/encrypterGenerator.interface';
 
 export default class JwtAdapter implements IEncrypter, IEncryptCompare {
 	private readonly secretKey: string;
