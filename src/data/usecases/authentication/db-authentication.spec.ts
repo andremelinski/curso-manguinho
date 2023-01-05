@@ -43,7 +43,7 @@ const makeLoadAccountByEmailRepository = (): ILoadAccountByEmailRepository => {
 
 const makeUpdateAccessTokenRepository = (): IUpdateAccessTokenRepository => {
 	class UpdateAccessTokenRepositoryStub implements IUpdateAccessTokenRepository {
-		update(userId: string, token: string): Promise<void> {
+		updateAccessToken(userId: string, token: string): Promise<void> {
 			return new Promise((resolve) => {
 				return resolve();
 			});
@@ -187,7 +187,10 @@ describe('DbAddAccount UseCase', () => {
 		expect(promise).toEqual('token');
 	});
 	test('should call UpdateAccessTokenRepository with corect values', async () => {
-		const updateAccessTokenRepoSpy = jest.spyOn(updateAccessTokenRepositoryStub, 'update');
+		const updateAccessTokenRepoSpy = jest.spyOn(
+			updateAccessTokenRepositoryStub,
+			'updateAccessToken'
+		);
 
 		await sut.auth(accountData);
 
@@ -195,7 +198,7 @@ describe('DbAddAccount UseCase', () => {
 	});
 	test('should throw if UpdateAccessTokenRepository throws', async () => {
 		// eslint-disable-next-line require-await
-		jest.spyOn(updateAccessTokenRepositoryStub, 'update').mockReturnValueOnce(
+		jest.spyOn(updateAccessTokenRepositoryStub, 'updateAccessToken').mockReturnValueOnce(
 			new Promise((resolve, reject) => {
 				return reject(new Error());
 			})
