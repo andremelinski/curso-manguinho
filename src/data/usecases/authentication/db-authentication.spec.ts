@@ -32,7 +32,7 @@ const makeHashComparer = (): IHashCompare => {
 };
 const makeLoadAccountByEmailRepository = (): ILoadAccountByEmailRepository => {
 	class LoadAccountByEmailRepositoryStub implements ILoadAccountByEmailRepository {
-		load(email: string): Promise<IAccountModel> {
+		loadAccountByEmail(email: string): Promise<IAccountModel> {
 			return new Promise((resolve) => {
 				return resolve(fakeAccount);
 			});
@@ -106,14 +106,14 @@ describe('DbAddAccount UseCase', () => {
 		} = makeSut());
 	});
 	test('should call LoadAccountByEmailRepository with correct email', async () => {
-		const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'load');
+		const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail');
 
 		await sut.auth(accountData);
 		expect(loadSpy).toHaveBeenCalledWith(accountData.email);
 	});
 	test('should throw if LoadAccountByEmailRepository throws', async () => {
 		// eslint-disable-next-line require-await
-		jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockReturnValueOnce(
+		jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail').mockReturnValueOnce(
 			new Promise((resolve, reject) => {
 				return reject(new Error());
 			})
@@ -125,7 +125,7 @@ describe('DbAddAccount UseCase', () => {
 	});
 	test('should return null if user not found', async () => {
 		// eslint-disable-next-line require-await
-		jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockReturnValueOnce(
+		jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail').mockReturnValueOnce(
 			null
 		);
 
