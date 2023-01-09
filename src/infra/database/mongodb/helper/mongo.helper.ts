@@ -22,8 +22,8 @@ export const MongoHelper = {
 	},
 	// because mongo returns only an _id we need to return the full info to follow the interface requirements
 	mapper(collectionInfo: any) {
-		const { _id, ...accountWithoutId } = collectionInfo;
+		const { _id, ...userInfoWithoutId } = collectionInfo;
 
-		return { ...accountWithoutId, id: _id };
+		return { ...userInfoWithoutId, id: _id };
 	},
 };

@@ -38,7 +38,7 @@ const makeValidation = (): IValidation => {
 	// if any error occurs, return error, else do nothing (return null)
 	class ValidationStub implements IValidation {
 		validate(object: any): Error {
-			return null;
+			return undefined;
 		}
 	}
 	return new ValidationStub();
