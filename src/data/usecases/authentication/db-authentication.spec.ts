@@ -2,6 +2,7 @@
 import { IAccountModel } from '../add-account/db-add-account-protocols';
 import { DbAuthentication } from './db-authentication';
 import {
+	IAuthenticationModel,
 	IEncrypter,
 	IHashCompare,
 	ILoadAccountByEmailRepository,
@@ -9,9 +10,9 @@ import {
 } from './db-authentication-protocols';
 
 
-const accountData = {
+const accountData: IAuthenticationModel = {
 	email: 'valid_email@email.com',
-	password: 'valid_password'
+	password: 'valid_password',
 };
 const fakeAccount: IAccountModel = {
 	id: 'valid_id',
@@ -109,7 +110,7 @@ describe('DbAddAccount UseCase', () => {
 		const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail');
 
 		await sut.auth(accountData);
-		expect(loadSpy).toHaveBeenCalledWith(accountData.email);
+		expect(loadSpy).toHaveBeenCalledWith('valid_email@email.com');
 	});
 	test('should throw if LoadAccountByEmailRepository throws', async () => {
 		// eslint-disable-next-line require-await
@@ -165,7 +166,7 @@ describe('DbAddAccount UseCase', () => {
 
 		await sut.auth(accountData);
 
-		expect(encrypterSpy).toHaveBeenCalledWith(fakeAccount.id);
+		expect(encrypterSpy).toHaveBeenCalledWith('valid_id');
 	});
 
 	test('should throw if encrypter throws', async () => {

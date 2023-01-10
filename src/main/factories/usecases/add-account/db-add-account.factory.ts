@@ -6,6 +6,7 @@ import env from '../../../config/env';
 export const makeDbAddAccount = (): DbAddAccount => {
 	const accountMongoRepository = new AccountMongoRepository();
 	const bcryptAdapter = new BcryptAdapter(parseInt(env.SALT));
+	const loadAccountByEmailRepository = new AccountMongoRepository();
 
-	return new DbAddAccount(bcryptAdapter, accountMongoRepository);
+	return new DbAddAccount(bcryptAdapter, accountMongoRepository, loadAccountByEmailRepository);
 };

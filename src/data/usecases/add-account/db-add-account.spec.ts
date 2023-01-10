@@ -1,7 +1,25 @@
 /* eslint-disable max-classes-per-file */
 import DbAddAccount from './db-add-account';
-import { IAccountModel, IAddAccountModel, IAddAccountRepository, IHasher } from './db-add-account-protocols';
+import {
+	IAccountModel,
+	IAddAccountModel,
+	IAddAccountRepository,
+	IHasher,
+	ILoadAccountByEmailRepository,
+} from './db-add-account-protocols';
 
+
+const accountData: IAddAccountModel = {
+	name: 'valid_name',
+	email: 'valid_email@email.com',
+	password: 'valid_password',
+};
+const fakeAccount: IAccountModel = {
+	id: 'valid_id',
+	name: 'valid_name',
+	email: 'valid_email@email.com',
+	password: 'hashed_password',
+};
 /* eslint-disable require-await */
 const makeHash = (): IHasher => {
 	class HashStub implements IHasher {
@@ -14,14 +32,18 @@ const makeHash = (): IHasher => {
 	return new HashStub();
 };
 
-const makeAddAccountRepository = (): IAddAccountRepository => {
-	const fakeAccount = {
-		id: 'valid_id',
-		name: 'valid_name',
-		email: 'valid_email',
-		password: 'hashed_password',
-	};
+const makeLoadAccountByEmailRepository = (): ILoadAccountByEmailRepository => {
+	class LoadAccountByEmailRepositoryStub implements ILoadAccountByEmailRepository {
+		loadByEmail(email: string): Promise<IAccountModel> {
+			return new Promise((resolve) => {
+				return resolve(null);
+			});
+		}
+	}
+	return new LoadAccountByEmailRepositoryStub();
+};
 
+const makeAddAccountRepository = (): IAddAccountRepository => {
 	class AddAccountRpositoryStub implements IAddAccountRepository {
 		add(account: IAddAccountModel): Promise<IAccountModel> {
 			return new Promise((resolve) => {
@@ -36,17 +58,23 @@ interface SutTypes {
 	hasherStub: IHasher;
 	sut: DbAddAccount;
 	addAccountRepositoryStub: IAddAccountRepository;
+	loadAccountByEmailRepositoryStub: ILoadAccountByEmailRepository;
 }
 const makeSut = (): SutTypes => {
 	const hasherStub = makeHash();
 	const addAccountRepositoryStub = makeAddAccountRepository();
-
-	const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub);
+	const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
+	const sut = new DbAddAccount(
+		hasherStub,
+		addAccountRepositoryStub,
+		loadAccountByEmailRepositoryStub
+	);
 
 	return {
 		hasherStub,
 		sut,
 		addAccountRepositoryStub,
+		loadAccountByEmailRepositoryStub,
 	};
 };
 
@@ -54,21 +82,17 @@ describe('DbAddAccount UseCase', () => {
 	let hasherStub: IHasher;
 	let sut: DbAddAccount;
 	let addAccountRepositoryStub: IAddAccountRepository;
+	let loadAccountByEmailRepositoryStub: ILoadAccountByEmailRepository;
 
 	beforeEach(() => {
-		({ sut, hasherStub, addAccountRepositoryStub } = makeSut());
+		({ sut, hasherStub, addAccountRepositoryStub, loadAccountByEmailRepositoryStub }
+			= makeSut());
 	});
 	test('should call Encrypted with correct password', async () => {
 		const encryptSpy = jest.spyOn(hasherStub, 'hash');
 
-		const accountData = {
-			name: 'valid_name',
-			email: 'valid_email',
-			password: 'valid_password',
-		};
-
 		await sut.add(accountData);
-		expect(encryptSpy).toHaveBeenCalledWith(accountData.password);
+		expect(encryptSpy).toHaveBeenCalledWith('valid_password');
 	});
 	// teste que evita a adicao de um try catch no Encrypter e errosera tratado na camada se signUp como erro 500
 	test('should throw Error when Encrypter throws', async () => {
@@ -78,12 +102,6 @@ describe('DbAddAccount UseCase', () => {
 			})
 		);
 
-		const accountData = {
-			name: 'valid_name',
-			email: 'valid_email',
-			password: 'valid_password',
-		};
-
 		const promiseAddccountDb = sut.add(accountData);
 
 		await expect(promiseAddccountDb).rejects.toThrow();
@@ -91,33 +109,33 @@ describe('DbAddAccount UseCase', () => {
 
 	test('should call DbAddAccount with correct information', async () => {
 		const addSpy = jest.spyOn(addAccountRepositoryStub, 'add');
-		const accountData = {
-			name: 'valid_name',
-			email: 'valid_email',
-			password: 'valid_password',
-		};
 
 		await sut.add(accountData);
 
 		expect(addSpy).toHaveBeenCalledWith({
 			name: 'valid_name',
-			email: 'valid_email',
+			email: 'valid_email@email.com',
 			password: 'hashed_password',
 		});
 	});
-	test('should call return an account on success', async () => {
-		const accountData = {
-			name: 'valid_name',
-			email: 'valid_email',
-			password: 'valid_password',
-		};
+	test('should return null LoadAccountByEmailRepository found an user', async () => {
+		jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(
+			new Promise((resolve) => {
+				return resolve(fakeAccount);
+			})
+		);
 
+		const user = await sut.add(accountData);
+
+		expect(user).toBeNull();
+	});
+	test('should call return an account on success', async () => {
 		const account = await sut.add(accountData);
 
 		expect(account).toEqual({
 			id: 'valid_id',
 			name: 'valid_name',
-			email: 'valid_email',
+			email: 'valid_email@email.com',
 			password: 'hashed_password',
 		});
 	});
@@ -129,14 +147,26 @@ describe('DbAddAccount UseCase', () => {
 			})
 		);
 
-		const accountData = {
-			name: 'valid_name',
-			email: 'valid_email',
-			password: 'valid_password',
-		};
-
 		const promiseAddccountDb = sut.add(accountData);
 
 		await expect(promiseAddccountDb).rejects.toThrow();
+	});
+	test('should call LoadAccountByEmailRepository with correct email', async () => {
+		const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail');
+
+		await sut.add(accountData);
+		expect(loadSpy).toHaveBeenCalledWith('valid_email@email.com');
+	});
+	test('should throw if LoadAccountByEmailRepository throws', async () => {
+		// eslint-disable-next-line require-await
+		jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(
+			new Promise((resolve, reject) => {
+				return reject(new Error());
+			})
+		);
+
+		const promise = sut.add(accountData);
+
+		await expect(promise).rejects.toThrow();
 	});
 });
