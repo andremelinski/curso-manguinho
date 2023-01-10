@@ -25,7 +25,7 @@ export const forbidden = (error: Error): HttpReponse => {
 export const serverError = (error: Error): HttpReponse => {
 	return {
 		statusCode: 500,
-		body: new ServerError(error?.stack),
+		body: new ServerError(error?.stack || error.message),
 	};
 };
 

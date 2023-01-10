@@ -44,7 +44,7 @@
 		"no-delete-var": "error",
 		"no-else-return": ["error", { "allowElseIf": true }],
 		"no-empty": "error",
-		"no-empty-function": "error",
+		"no-empty-function": ["error", { "allow": ["constructors"] }],
 		"no-empty-static-block": "error",
 		"no-eval": "error",
 		"no-extra-boolean-cast": "error",

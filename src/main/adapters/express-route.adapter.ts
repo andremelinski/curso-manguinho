@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { IController, HttpRequest, HttpReponse } from '../../presentation/http';
+
+import { HttpReponse, HttpRequest, IController } from '../../presentation/http';
 
 export const adaptRoute = (controller: IController) => {
 	return async (req: Request, res: Response) => {
