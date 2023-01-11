@@ -4,21 +4,11 @@ import { badRequest, forbidden, ok, serverError } from '../../helper/http-helper
 import { HttpReponse, HttpRequest, IAddAccount, IController, IValidation } from './signup-protocols';
 
 export class SignUpController implements IController {
-	private readonly addAccount: IAddAccount;
-
-	private readonly validation: IValidation;
-
-	private readonly authentication: IAuthentication;
-
 	constructor(
-		addAccountModel: IAddAccount,
-		validation: IValidation,
-		authentication: IAuthentication
-	) {
-		this.addAccount = addAccountModel;
-		this.validation = validation;
-		this.authentication = authentication;
-	}
+		private readonly addAccount: IAddAccount,
+		private readonly validation: IValidation,
+		private readonly authentication: IAuthentication
+	) {}
 
 	async handle(httpRequest: HttpRequest): Promise<HttpReponse> {
 		try {

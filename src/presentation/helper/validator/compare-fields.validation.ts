@@ -3,14 +3,7 @@ import { InvalidParamError } from '../../errors';
 
 
 export class CompareFieldValidation implements IValidation {
-	private readonly fieldName;
-
-	private readonly fieldToCompare;
-
-	constructor(fieldName: string, fieldToCompare: string) {
-		this.fieldName = fieldName;
-		this.fieldToCompare = fieldToCompare;
-	}
+	constructor(private readonly fieldName: string, private readonly fieldToCompare: string) {}
 
 	// eslint-disable-next-line consistent-return
 	validate(object: any): Error | undefined {

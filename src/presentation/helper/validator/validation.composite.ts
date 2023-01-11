@@ -1,11 +1,7 @@
 import { IValidation } from '../../../presentation/interfaces';
 
 export class ValidationComposite implements IValidation {
-	private readonly validations;
-
-	constructor(validations: IValidation[]) {
-		this.validations = validations;
-	}
+	constructor(private readonly validations: IValidation[]) {}
 
 	// eslint-disable-next-line consistent-return
 	validate(object: any): Error | undefined {

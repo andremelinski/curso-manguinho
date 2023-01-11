@@ -5,4 +5,6 @@ data layer -> database actions.
 infra -> database connections, database used
 main layer -> where the framework stays and where the instance that call other folders.
 Ex: signUp Route that'll call the signUp controller
-utils -> Here goes everything that controls your app like constants, assets, enums, lang folders, routes, styles, etc.. This folder is for storing all utility functions such as formatters. generally only store pure functions in this folder since if a utility function has side effects then it is most likely not just a simple utility function.
+utils -> A Utility class is understood to only have static methods and be stateless. You would not create an instance of such a class.
+A Helper can be a utility class or it can be stateful or require an instance be created. I would avoid this if possible."helpful" vs "useful", a helpful tool tends to have some context (cheese grater helps to grate cheese, corn stripper helps to strip corn, speed loader helps to reload a firearm). A "utility" is expected to work in a variety of contexts (WD-40, duct tape, army-knives, glue, flashlight, etc...).
+https://stackoverflow.com/questions/12192050/what-are-the-differences-between-helper-and-utility-classes

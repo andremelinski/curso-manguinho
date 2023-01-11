@@ -4,11 +4,7 @@ import { IEncryptCompare } from '../../../data/interfaces/criptography/token/enc
 import { IEncrypter } from '../../../data/interfaces/criptography/token/encrypterGenerator.interface';
 
 export default class JwtAdapter implements IEncrypter, IEncryptCompare {
-	private readonly secretKey: string;
-
-	constructor(secretKey: string) {
-		this.secretKey = secretKey;
-	}
+	constructor(private readonly secretKey: string) {}
 
 	encrypt(value: string): string {
 		return jwt.sign({ id: value }, this.secretKey);

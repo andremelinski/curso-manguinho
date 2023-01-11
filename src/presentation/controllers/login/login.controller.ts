@@ -4,15 +4,10 @@ import { HttpReponse, HttpRequest, IAuthentication, IController } from './login-
 
 
 export default class LoginController implements IController {
-	private readonly authentication: IAuthentication;
-
-
-	private readonly validation: IValidation;
-
-	constructor(authentication: IAuthentication, validation: IValidation) {
-		this.authentication = authentication;
-		this.validation = validation;
-	}
+	constructor(
+		private readonly authentication: IAuthentication,
+		private readonly validation: IValidation
+	) {}
 
 	// eslint-disable-next-line require-await
 	async handle(httpRequest: HttpRequest): Promise<HttpReponse> {
@@ -25,7 +20,7 @@ export default class LoginController implements IController {
 			}
 			const toAuth = {
 				email: accountInfo.email,
-				password: accountInfo.password
+				password: accountInfo.password,
 			};
 			const authToken = await this.authentication.auth(toAuth);
 
