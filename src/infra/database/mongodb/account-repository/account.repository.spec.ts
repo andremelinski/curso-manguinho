@@ -1,12 +1,12 @@
 import { Collection } from 'mongodb';
 
-import { IAddAccountModel } from '../../../../domain/interfaces/usecases/addAccount.interface';
+import { IAddAccountDto } from '../../../../domain/interfaces/usecases/addAccount.interface';
 import { MongoHelper } from '../helper/mongo.helper';
 import AccountMongoRepository from './account.repository';
 
 const token = 'any_token';
 
-const accountData = ():IAddAccountModel => {
+const accountData = ():IAddAccountDto => {
 	return {
 		name: 'valid_name',
 		email: 'valid_email',

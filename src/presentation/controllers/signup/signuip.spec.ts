@@ -1,11 +1,12 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-nested-callbacks */
-/* eslint-disable max-classes-per-file */
 import { EmailInUseError, MissingParamError, ServerError } from '../../errors';
 import { badRequest, forbidden, ok, serverError } from '../../helper/http-helper';
-import { IAuthentication, IAuthenticationModel } from '../login/login-protocols';
-import { HttpReponse, HttpRequest, IAccountModel, IAddAccount, IAddAccountModel, IValidation } from './signup-protocols';
+import { IAuthentication, IAuthenticationDto } from '../login/login-protocols';
+import { HttpReponse, HttpRequest, IAccountModel, IAddAccount, IAddAccountDto, IValidation } from './signup-protocols';
 import { SignUpController } from './signup.controller';
+
 
 const correctHttpRequest: HttpRequest = {
 	body: {
@@ -28,7 +29,7 @@ const userToken = 'any_token';
 const makeAddAccount = (): IAddAccount => {
 	class AddAccountStub implements IAddAccount {
 		// eslint-disable-next-line require-await
-		async add(account: IAddAccountModel): Promise<IAccountModel> {
+		async add(account: IAddAccountDto): Promise<IAccountModel> {
 			return new Promise((resolve, reject) => {
 				return resolve(fakeAccount);
 			});
@@ -50,7 +51,7 @@ const makeValidation = (): IValidation => {
 const makeAuthentication = (): IAuthentication => {
 	class AuthenticationStub implements IAuthentication {
 		// eslint-disable-next-line require-await
-		async auth(authentication: IAuthenticationModel): Promise<string> {
+		async auth(authentication: IAuthenticationDto): Promise<string> {
 			return new Promise((resolve) => {
 				return resolve(userToken);
 			});

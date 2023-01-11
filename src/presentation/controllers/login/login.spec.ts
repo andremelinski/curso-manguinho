@@ -1,9 +1,10 @@
 /* eslint-disable max-classes-per-file */
 import { MissingParamError } from '../../errors';
 import { badRequest, serverError, unauthorized } from '../../helper/http-helper';
-import { HttpReponse, HttpRequest, IAuthentication, IAuthenticationModel, IValidation } from './login-protocols';
+import { HttpReponse, HttpRequest, IAuthentication, IAuthenticationDto, IValidation } from './login-protocols';
 import LoginController from './login.controller';
 
+/* eslint-disable max-classes-per-file */
 const correctHttpRequest: HttpRequest = {
 	body: {
 		email: 'valid_email@email.com',
@@ -26,7 +27,7 @@ const makeValidation = (): IValidation => {
 const makeAuthentication = (): IAuthentication => {
 	class AuthenticationStub implements IAuthentication {
 		// eslint-disable-next-line require-await
-		async auth(authentication: IAuthenticationModel): Promise<string> {
+		async auth(authentication: IAuthenticationDto): Promise<string> {
 			return new Promise((resolve) => {
 				return resolve('any_token');
 			});

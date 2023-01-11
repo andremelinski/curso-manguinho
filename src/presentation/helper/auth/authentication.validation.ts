@@ -1,4 +1,4 @@
-import { IAuthentication, IAuthenticationModel } from '../../../domain/interfaces/usecases/authentication.interface';
+import { IAuthentication, IAuthenticationDto } from '../../../domain/interfaces/usecases/authentication.interface';
 import { IAuthenticator } from './authenticator.interface';
 
 export default class AuthenticationValidation implements IAuthenticator {
@@ -8,7 +8,7 @@ export default class AuthenticationValidation implements IAuthenticator {
 		this.authentication = authentication;
 	}
 
-	async validate(userInfoToValidate: IAuthenticationModel): Promise<string> {
+	async validate(userInfoToValidate: IAuthenticationDto): Promise<string> {
 		const authUser = await this.authentication.auth(userInfoToValidate);
 
 		return authUser;

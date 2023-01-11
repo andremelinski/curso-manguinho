@@ -2,14 +2,13 @@
 import DbAddAccount from './db-add-account';
 import {
 	IAccountModel,
-	IAddAccountModel,
+	IAddAccountDto,
 	IAddAccountRepository,
 	IHasher,
 	ILoadAccountByEmailRepository,
 } from './db-add-account-protocols';
 
-
-const accountData: IAddAccountModel = {
+const accountData: IAddAccountDto = {
 	name: 'valid_name',
 	email: 'valid_email@email.com',
 	password: 'valid_password',
@@ -45,7 +44,7 @@ const makeLoadAccountByEmailRepository = (): ILoadAccountByEmailRepository => {
 
 const makeAddAccountRepository = (): IAddAccountRepository => {
 	class AddAccountRpositoryStub implements IAddAccountRepository {
-		add(account: IAddAccountModel): Promise<IAccountModel> {
+		add(account: IAddAccountDto): Promise<IAccountModel> {
 			return new Promise((resolve) => {
 				resolve(fakeAccount);
 			});

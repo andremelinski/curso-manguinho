@@ -9,7 +9,7 @@ export class EmailValidation implements IValidation {
 		this.emailValidator = emailValidator;
 	}
 
-	// eslint-disable-next-line consistent-return
+	// eslint-disable-next-line consistent-return, @typescript-eslint/no-explicit-any
 	validate({ email }: any): Error | undefined {
 		const isValid = this.emailValidator.isValid(email);
 

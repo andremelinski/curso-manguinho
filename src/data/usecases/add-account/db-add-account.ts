@@ -1,13 +1,14 @@
-/* eslint-disable function-paren-newline */
 import {
 	IAccountModel,
 	IAddAccount,
-	IAddAccountModel,
+	IAddAccountDto,
 	IAddAccountRepository,
 	IHasher,
 	ILoadAccountByEmailRepository,
 } from './db-add-account-protocols';
 
+/* eslint-disable max-classes-per-file */
+/* eslint-disable function-paren-newline */
 export default class DbAddAccount implements IAddAccount {
 	constructor(
 		private readonly hasher: IHasher,
@@ -15,7 +16,7 @@ export default class DbAddAccount implements IAddAccount {
 		private readonly loadAccountByEmailRepository: ILoadAccountByEmailRepository
 	) {}
 
-	async add(accountData: IAddAccountModel): Promise<IAccountModel> {
+	async add(accountData: IAddAccountDto): Promise<IAccountModel> {
 		const account = await this.loadAccountByEmailRepository.loadByEmail(accountData.email);
 
 		if (account) {

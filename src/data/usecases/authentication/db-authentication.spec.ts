@@ -2,15 +2,16 @@
 import { IAccountModel } from '../add-account/db-add-account-protocols';
 import { DbAuthentication } from './db-authentication';
 import {
-	IAuthenticationModel,
+	IAuthenticationDto,
 	IEncrypter,
 	IHashCompare,
 	ILoadAccountByEmailRepository,
 	IUpdateAccessTokenRepository,
 } from './db-authentication-protocols';
 
+/* eslint-disable max-classes-per-file */
 
-const accountData: IAuthenticationModel = {
+const accountData: IAuthenticationDto = {
 	email: 'valid_email@email.com',
 	password: 'valid_password',
 };
