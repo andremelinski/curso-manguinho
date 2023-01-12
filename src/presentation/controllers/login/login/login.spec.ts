@@ -1,10 +1,9 @@
 /* eslint-disable max-classes-per-file */
-import { MissingParamError } from '../../errors';
-import { badRequest, serverError, unauthorized } from '../../helper/http-helper';
+import { MissingParamError } from '../../../errors';
+import { badRequest, serverError, unauthorized } from '../../../helper/http-helper';
 import { HttpReponse, HttpRequest, IAuthentication, IAuthenticationDto, IValidation } from './login-protocols';
 import LoginController from './login.controller';
 
-/* eslint-disable max-classes-per-file */
 const correctHttpRequest: HttpRequest = {
 	body: {
 		email: 'valid_email@email.com',
@@ -12,7 +11,7 @@ const correctHttpRequest: HttpRequest = {
 	},
 };
 
-jest.mock('../../helper/validator/validation.composite.ts');
+jest.mock('../../../helper/validator/validation.composite.ts');
 
 const makeValidation = (): IValidation => {
 	// if any error occurs, return error, else do nothing (return null)

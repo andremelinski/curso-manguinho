@@ -1,12 +1,11 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-nested-callbacks */
-import { EmailInUseError, MissingParamError, ServerError } from '../../errors';
-import { badRequest, forbidden, ok, serverError } from '../../helper/http-helper';
+import { EmailInUseError, MissingParamError } from '../../../errors';
+import { badRequest, forbidden, ok, serverError } from '../../../helper/http-helper';
 import { IAuthentication, IAuthenticationDto } from '../login/login-protocols';
 import { HttpReponse, HttpRequest, IAccountModel, IAddAccount, IAddAccountDto, IValidation } from './signup-protocols';
 import { SignUpController } from './signup.controller';
-
 
 const correctHttpRequest: HttpRequest = {
 	body: {
@@ -111,13 +110,14 @@ describe('Sign Up Controller', () => {
 		const httpResponse = await sut.handle(correctHttpRequest);
 
 		expect(httpResponse.statusCode).toBe(500);
-		expect(httpResponse.body).toEqual(new ServerError('stack Error'));
+		expect(httpResponse).toEqual(serverError(new Error()));
 	});
 	test('Should return 403 if account already exist', async () => {
-		jest
-			.spyOn(addAccountStub, 'add').mockResolvedValueOnce(new Promise(resolve => {
+		jest.spyOn(addAccountStub, 'add').mockResolvedValueOnce(
+			new Promise((resolve) => {
 				return resolve(null);
-			}));
+			})
+		);
 		const httpResponse: HttpReponse = await sut.handle(correctHttpRequest);
 
 		expect(httpResponse).toEqual(forbidden(new EmailInUseError('valid_email@email.com')));
@@ -137,7 +137,9 @@ describe('Sign Up Controller', () => {
 	});
 
 	test('Should return 400 if validation return an error', async () => {
-		jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new MissingParamError('any_field'));
+		jest.spyOn(validationStub, 'validate').mockReturnValueOnce(
+			new MissingParamError('any_field')
+		);
 		const httpResponse = await sut.handle(correctHttpRequest);
 
 		expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')));
@@ -147,7 +149,10 @@ describe('Sign Up Controller', () => {
 
 		await sut.handle(correctHttpRequest);
 
-		expect(addSpy).toHaveBeenCalledWith({ email: 'valid_email@email.com', password: 'valid_password' });
+		expect(addSpy).toHaveBeenCalledWith({
+			email: 'valid_email@email.com',
+			password: 'valid_password',
+		});
 	});
 	test('Should return 500 if Authenticator throws', async () => {
 		// eslint-disable-next-line max-nested-callbacks

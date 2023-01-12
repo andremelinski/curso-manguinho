@@ -1,4 +1,4 @@
-import { SignUpController } from '../../../presentation/controllers/signup/signup.controller';
+import { SignUpController } from '../../../presentation/controllers/login/signup/signup.controller';
 import { IController } from '../../../presentation/http';
 import { makeLogControllerDecorator } from '../decorator/log-controller-decorator-factory';
 import { makeSignUpValidation } from '../sign-up/sign-up.validation';

@@ -1,5 +1,5 @@
-import { IValidation } from '../../../presentation/interfaces';
-import { badRequest, ok, serverError, unauthorized } from '../../helper/http-helper';
+import { badRequest, ok, serverError, unauthorized } from '../../../helper/http-helper';
+import { IValidation } from '../../../interfaces';
 import { HttpReponse, HttpRequest, IAuthentication, IController } from './login-protocols';
 
 
