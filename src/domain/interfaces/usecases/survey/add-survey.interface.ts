@@ -1,6 +1,6 @@
 export interface SurveyAnswerDto {
-	image: string;
-	answers: string;
+	image?: string;
+	answer: string;
 }
 
 export interface IAddSurveyDto {
