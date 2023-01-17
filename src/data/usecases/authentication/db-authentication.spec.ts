@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import { IAccountModel } from '../add-account/db-add-account-protocols';
 import { DbAuthentication } from './db-authentication';
 import {
+	IAccountModel,
 	IAuthenticationDto,
 	IEncrypter,
 	IHashCompare,

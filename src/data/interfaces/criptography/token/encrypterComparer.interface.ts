@@ -1,3 +1,3 @@
-export interface IEncryptCompare {
-	compare(value: string): boolean;
+export interface IDecrypter {
+	decrypt(value: string): Promise<string>;
 }

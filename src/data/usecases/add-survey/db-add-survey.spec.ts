@@ -1,5 +1,5 @@
+import DbAddSurvey from './db-add-survey';
 import { IAddSurvey, IAddSurveyDto, IAddSurveyRepository } from './db-add-survey-protocols';
-import DbAddSurvey from './db-add-survey.';
 
 
 const fakeSurveyData: IAddSurveyDto = {
