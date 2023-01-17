@@ -1,17 +1,24 @@
 import { AccessDeniedError } from '../../errors';
-import { forbidden } from '../../helper/http-helper';
-import { HttpReponse, HttpRequest, IMiddleware } from '../../http';
+import { forbidden, ok, serverError } from '../../helper/http-helper';
+import { HttpReponse, HttpRequest, ILoadAccountByToken, IMiddleware } from './auth-midleware.protocols';
 
 export class AuthMiddleware implements IMiddleware {
-	handle(httpRequest: HttpRequest): Promise<HttpReponse> {
-		// try {
-		const forb = forbidden(new AccessDeniedError());
+	constructor(private readonly loadAccountByToken: ILoadAccountByToken, private readonly role?: string) {}
 
-		return new Promise((resolve) => {
-			return resolve(forb);
-		});
-		// } catch (error) {
-		// 	return serverError(error);
-		// }
+	async handle(httpRequest: HttpRequest): Promise<HttpReponse> {
+		try {
+			const accessToken = httpRequest.headers?.[ 'x-access-token' ];
+
+			if (accessToken) {
+				const account = await this.loadAccountByToken.load(accessToken, this.role);
+
+				if (account) {
+					return ok({ accountId: account.id });
+				}
+			}
+			return forbidden(new AccessDeniedError());
+		} catch (error) {
+			return serverError(error);
+		}
 	}
 }
