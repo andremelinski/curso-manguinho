@@ -2,13 +2,18 @@ import { ObjectId } from 'mongodb';
 
 import { IAddAccountRepository } from '../../../../data/interfaces/db/addAccountRepository.interface';
 import { ILoadAccountByEmailRepository } from '../../../../data/interfaces/db/loadAccountByEmailRepository.interface';
+import { ILoadAccountByTokenRepository } from '../../../../data/interfaces/db/loadAccountByTokenRepository.interface';
 import { IUpdateAccessTokenRepository } from '../../../../data/interfaces/db/updateAccessTokenRepository.interface';
 import { IAccountModel } from '../../../../domain/interfaces/model/accountModel.interfae';
 import { IAddAccountDto } from '../../../../domain/interfaces/usecases/addAccount.interface';
 import { MongoHelper } from '../helper/mongo.helper';
 
 export default class AccountMongoRepository
-implements IAddAccountRepository, ILoadAccountByEmailRepository, IUpdateAccessTokenRepository {
+implements
+		IAddAccountRepository,
+		ILoadAccountByEmailRepository,
+		IUpdateAccessTokenRepository,
+		ILoadAccountByTokenRepository {
 	async add(accountInfo: IAddAccountDto): Promise<IAccountModel> {
 		const accountCollection = await MongoHelper.getCollection('accounts');
 
@@ -27,6 +32,17 @@ implements IAddAccountRepository, ILoadAccountByEmailRepository, IUpdateAccessTo
 	async updateAccessToken(userId: string, token: string): Promise<void> {
 		const accountCollection = await MongoHelper.getCollection('accounts');
 
-		await accountCollection.findOneAndUpdate({ _id: new ObjectId(userId) }, { $set: { accessToken: token } });
+		await accountCollection.findOneAndUpdate(
+			{ _id: new ObjectId(userId) },
+			{ $set: { accessToken: token } }
+		);
+	}
+
+	async loadByToken(token: string, role?: string): Promise<IAccountModel> {
+		const accountCollection = await MongoHelper.getCollection('accounts');
+
+		const account = await accountCollection.findOne({ accessToken: token, role });
+
+		return account && MongoHelper.mapper(account);
 	}
 }
