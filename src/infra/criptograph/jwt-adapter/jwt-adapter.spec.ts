@@ -39,8 +39,27 @@ describe('Jwt adapter', () => {
 		expect(jwtToken).toEqual('token_generted');
 	});
 
+	test('should call jwt.verify with correct values', () => {
+		const verifySpy = jest.spyOn(jwt, 'verify');
+
+		sut.decrypt('token_generted');
+		expect(verifySpy).toHaveBeenCalledWith('token_generted', secretKey);
+	});
+
+	test('should call jwt.verify with correct values', () => {
+		const tokenValue = sut.decrypt('token_generted');
+
+		expect(tokenValue).toEqual('token_verified');
+	});
+
 	test('Should throw if jwt.sign throws', () => {
 		jest.spyOn(jwt, 'sign').mockImplementationOnce(() => {
+			throw new Error('stack_error');
+		});
+		expect(sut.encrypt).toThrow();
+	});
+	test('Should throw if jwt.verify throws', () => {
+		jest.spyOn(jwt, 'verify').mockImplementationOnce(() => {
 			throw new Error('stack_error');
 		});
 		expect(sut.encrypt).toThrow();

@@ -28,10 +28,8 @@ const makeLoadAccountByTokenRepository = (): ILoadAccountByTokenRepository => {
 const makeDecrypter = (): IDecrypter => {
 	return new (class DecrypterStub implements IDecrypter {
 		// eslint-disable-next-line require-await
-		async decrypt(): Promise<string> {
-			return new Promise((resolve) => {
-				resolve('token_decrypted');
-			});
+		decrypt(): string {
+			return 'token_decrypted';
 		}
 	})();
 };
@@ -67,14 +65,12 @@ describe('DbLoadAccountByToken Usecase', () => {
 		expect(decrypterStubSpy).toHaveBeenCalledWith(accessToken);
 	});
 	test('Should return null if Decrypter fail to decrpyt', async () => {
-		jest.spyOn(decrypterStub, 'decrypt').mockResolvedValue(Promise.resolve(null));
+		jest.spyOn(decrypterStub, 'decrypt').mockReturnValue(null);
 
 		const account = await sut.load(accessToken);
-
-		expect(account).toBeNull();
-
 		const accountWithRole = await sut.load(accessToken, role);
 
+		expect(account).toBeNull();
 		expect(accountWithRole).toBeNull();
 	});
 	test('Should call loadAccountByToken when token exists', async () => {
@@ -112,7 +108,9 @@ describe('DbLoadAccountByToken Usecase', () => {
 		expect(accountWithRole).toEqual(fakeAccount);
 	});
 	test('should throw Error if Decrypter throws', async () => {
-		jest.spyOn(decrypterStub, 'decrypt').mockRejectedValueOnce(new Error());
+		jest.spyOn(decrypterStub, 'decrypt').mockImplementationOnce(() => {
+			throw new Error();
+		});
 
 		const promiseDb = sut.load(accessToken, role);
 

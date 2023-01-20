@@ -10,7 +10,7 @@ export default class DbLoadAccountByToken implements ILoadAccountByToken {
 	) {}
 
 	async load(accessToken: string, role?: string): Promise<IAccountModel> | null {
-		const token = await this.decrypter.decrypt(accessToken);
+		const token = this.decrypter.decrypt(accessToken);
 
 		if (token) {
 			const userAccount = await this.loadAccountRepository.loadByToken(token, role);
