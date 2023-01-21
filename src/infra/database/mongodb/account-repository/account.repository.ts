@@ -29,19 +29,19 @@ implements
 		return account && MongoHelper.mapper(account);
 	}
 
-	async updateAccessToken(userId: string, token: string): Promise<void> {
+	async updateAccessToken(userId: string, accessToken: string): Promise<void> {
 		const accountCollection = await MongoHelper.getCollection('accounts');
 
 		await accountCollection.findOneAndUpdate(
 			{ _id: new ObjectId(userId) },
-			{ $set: { accessToken: token } }
+			{ $set: { accessToken } }
 		);
 	}
 
-	async loadByToken(token: string, role?: string): Promise<IAccountModel> {
+	async loadByToken(userId: string, role?: string): Promise<IAccountModel> {
 		const accountCollection = await MongoHelper.getCollection('accounts');
 
-		const account = await accountCollection.findOne({ accessToken: token, role });
+		const account = await accountCollection.findOne({ _id: new ObjectId(userId), role });
 
 		return account && MongoHelper.mapper(account);
 	}

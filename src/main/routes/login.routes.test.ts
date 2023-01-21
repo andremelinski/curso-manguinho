@@ -48,7 +48,6 @@ describe('Login Routes', () => {
 			const { email } = accountData;
 
 			await accountCollection.insertOne(accountData);
-
 			await request(app)
 				.post('/api/login')
 				.send({

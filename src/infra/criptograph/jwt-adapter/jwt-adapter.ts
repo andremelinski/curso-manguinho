@@ -13,6 +13,6 @@ export default class JwtAdapter implements IEncrypter, IDecrypter {
 	decrypt(value: string): string {
 		const decryptToken: any = jwt.verify(value, this.secretKey);
 
-		return decryptToken;
+		return decryptToken.id;
 	}
 }

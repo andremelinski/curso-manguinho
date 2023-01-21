@@ -10,8 +10,8 @@ jest.mock('jsonwebtoken', () => {
 		sign(payload: string, secretKey: string): string {
 			return 'token_generted';
 		},
-		verify(payload: string, secretKey: string): string {
-			return 'token_verified';
+		verify(payload: string, secretKey: string): any {
+			return { id: 'user_id', iat: 1674242324 };
 		},
 	};
 });
@@ -49,7 +49,7 @@ describe('Jwt adapter', () => {
 	test('should call jwt.verify with correct values', () => {
 		const tokenValue = sut.decrypt('token_generted');
 
-		expect(tokenValue).toEqual('token_verified');
+		expect(tokenValue).toEqual('user_id');
 	});
 
 	test('Should throw if jwt.sign throws', () => {

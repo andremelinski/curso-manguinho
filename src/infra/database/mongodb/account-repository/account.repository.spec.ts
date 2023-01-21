@@ -82,10 +82,15 @@ describe('Account Mongo Repository', () => {
 		expect(userFound.accessToken).toEqual(token);
 	});
 	test('Should Return an account on loadByToken success without role', async () => {
-		const userWithToken = { ...accountData(), accessToken: 'valid_token' };
+		const userWithToken = {
+			name: 'valid_name',
+			email: 'valid_email',
+			password: 'hashed_password',
+			accessToken: 'valid_token'
+		};
 
-		await accountCollection.insertOne(userWithToken);
-		const userAccount = await sut.loadByToken('valid_token');
+		const userAdded = await accountCollection.insertOne(userWithToken);
+		const userAccount = await sut.loadByToken(userAdded.insertedId.toString());
 
 		expect(userAccount).toBeTruthy();
 		expect(userAccount.id).toBeTruthy();
@@ -94,8 +99,8 @@ describe('Account Mongo Repository', () => {
 		expect(userAccount.password).toEqual('hashed_password');
 	});
 	test('Should Return an account on loadByToken success with role', async () => {
-		await accountCollection.insertOne(userWithToken);
-		const userAccount = await sut.loadByToken('valid_token', 'any_role');
+		const userAdded = await accountCollection.insertOne(userWithToken);
+		const userAccount = await sut.loadByToken(userAdded.insertedId.toString(), 'any_role');
 
 		expect(userAccount).toBeTruthy();
 		expect(userAccount.id).toBeTruthy();
@@ -104,7 +109,7 @@ describe('Account Mongo Repository', () => {
 		expect(userAccount.password).toEqual('hashed_password');
 	});
 	test('Should Return null if loadByToken fails', async () => {
-		const userAccount = await sut.loadByToken(userWithToken.accessToken);
+		const userAccount = await sut.loadByToken('63caed7f3ad98c4c0a505bb6');
 
 		expect(userAccount).toBeFalsy();
 	});
