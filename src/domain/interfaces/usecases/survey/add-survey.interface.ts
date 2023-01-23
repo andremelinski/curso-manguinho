@@ -1,11 +1,12 @@
 export interface SurveyAnswerDto {
-	image?: string;
-	answer: string;
+    image?: string;
+    answer: string;
 }
 
 export interface IAddSurveyDto {
-    question: string,
-    answers: SurveyAnswerDto[]
+	question: string;
+	answers: SurveyAnswerDto[];
+	date: Date;
 }
 
 export interface IAddSurvey {

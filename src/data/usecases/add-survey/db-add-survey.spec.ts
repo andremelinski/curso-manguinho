@@ -1,10 +1,13 @@
+import { correctSurveyHttpRequest } from '../../../utils/constant/mock.constant';
 import DbAddSurvey from './db-add-survey';
 import { IAddSurvey, IAddSurveyDto, IAddSurveyRepository } from './db-add-survey-protocols';
 
 
+jest.useFakeTimers().setSystemTime(new Date());
+
 const fakeSurveyData: IAddSurveyDto = {
-	question: 'any_question',
-	answers: [{ image: 'any_image', answer: 'any_answer' }],
+	...correctSurveyHttpRequest.body,
+	date: new Date(),
 };
 
 const makeAddSurveyRepository = (): IAddSurveyRepository => {
@@ -41,10 +44,7 @@ describe('DbSurvey Usecase', () => {
 		const addSurveyRepositorySpy = jest.spyOn(addSurveyStub, 'add');
 
 		await sut.add(fakeSurveyData);
-		expect(addSurveyRepositorySpy).toHaveBeenCalledWith({
-			question: 'any_question',
-			answers: [{ image: 'any_image', answer: 'any_answer' }],
-		});
+		expect(addSurveyRepositorySpy).toHaveBeenCalledWith(fakeSurveyData);
 	});
 	test('should throw Error when AddSurveyRepository throws', async () => {
 		jest.spyOn(addSurveyStub, 'add').mockRejectedValueOnce(new Error());

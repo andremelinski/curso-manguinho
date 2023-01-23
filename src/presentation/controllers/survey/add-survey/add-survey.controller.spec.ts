@@ -1,23 +1,18 @@
 /* eslint-disable max-classes-per-file */
+import { correctSurveyHttpRequest } from '../../../../utils/constant/mock.constant';
 import { MissingParamError } from '../../../errors';
 import { badRequest, noContent, serverError } from '../../../helper/http-helper';
-import { HttpReponse, HttpRequest, IAddSurvey, IAddSurveyDto, IValidation } from './add-surver-protocols';
+import { HttpReponse, IAddSurvey, IAddSurveyDto, IValidation } from './add-surver-protocols';
 import AddSurveyController from './add-survey.controller';
 
-
-const correctHttpRequest: HttpRequest = {
-	body: {
-		question: 'any_question',
-		answers: [{ image: 'any_image', answer: 'any_answer' }]
-
-	},
-};
 
 // const fakeSurvey = {
 // 	id: 'valid_id',
 // 	question: 'valid_question',
 // 	answer: 'valid_answer',
 // };
+
+jest.useFakeTimers().setSystemTime(new Date());
 
 const makeValidation = (): IValidation => {
 	return new class ValidationComposite implements IValidation {
@@ -63,17 +58,14 @@ describe('Add Survey Controller', () => {
 	test('should call validationStub with correct data', async () => {
 		const validationSpyOn = jest.spyOn(validationStub, 'validate');
 
-		await sut.handle(correctHttpRequest);
+		await sut.handle(correctSurveyHttpRequest);
 
-		expect(validationSpyOn).toHaveBeenCalledWith({
-			answers: [{ answer: 'any_answer', image: 'any_image' }],
-			question: 'any_question',
-		});
+		expect(validationSpyOn).toHaveBeenCalledWith(correctSurveyHttpRequest.body);
 	});
 	test('Should return 500 if AddSurveyController throws', async () => {
 		// eslint-disable-next-line require-await
 		jest.spyOn(addSurveyStub, 'add').mockRejectedValueOnce(new Error('Async error'));
-		const httpResponse = await sut.handle(correctHttpRequest);
+		const httpResponse = await sut.handle(correctSurveyHttpRequest);
 
 		expect(httpResponse.statusCode).toBe(500);
 		expect(httpResponse).toEqual(serverError(new Error()));
@@ -82,23 +74,23 @@ describe('Add Survey Controller', () => {
 		jest.spyOn(validationStub, 'validate').mockReturnValueOnce(
 			new MissingParamError('any_field')
 		);
-		const httpResponse = await sut.handle(correctHttpRequest);
+		const httpResponse = await sut.handle(correctSurveyHttpRequest);
 
 		expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')));
 	});
 	test('should call AddSurvey with correct data', async () => {
 		const addSurveySpyOn = jest.spyOn(addSurveyStub, 'add');
 
-		await sut.handle(correctHttpRequest);
+		await sut.handle(correctSurveyHttpRequest);
+		const addSurvey: IAddSurveyDto = {
+			...correctSurveyHttpRequest.body,
+			date: new Date(),
+		};
 
-		expect(addSurveySpyOn).toHaveBeenCalledWith({
-			question: 'any_question',
-			answers: [{ image: 'any_image', answer: 'any_answer' }]
-
-		});
+		expect(addSurveySpyOn).toHaveBeenCalledWith(addSurvey);
 	});
 	test('should return 204 on success', async () => {
-		const httpResponse: HttpReponse = await sut.handle(correctHttpRequest);
+		const httpResponse: HttpReponse = await sut.handle(correctSurveyHttpRequest);
 
 		expect(httpResponse).toEqual(noContent());
 	});

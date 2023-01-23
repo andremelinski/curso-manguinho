@@ -6,7 +6,8 @@ import SurveyMongoRepository from './survey-mongo.repository';
 
 const fakeSurveyData: IAddSurveyDto = {
 	question: 'any_question',
-	answers: [{ image: 'any_image', answer: 'any_answer' }, { answer: 'any_answer2' },],
+	answers: [{ image: 'any_image', answer: 'any_answer' }, { answer: 'any_answer2' }],
+	date: new Date(),
 };
 
 

@@ -11,9 +11,10 @@ export default class AddSurveyController implements IController {
 			if (error) {
 				return badRequest(error);
 			}
-			const { question, answers }: IAddSurveyDto = httpRequest.body;
+			const { question, answers } = httpRequest.body;
+			const addSurvey: IAddSurveyDto = { question, answers, date: new Date() };
 
-			await this.addSurvey.add({ question, answers });
+			await this.addSurvey.add(addSurvey);
 
 			return noContent();
 		} catch (error) {

@@ -4,15 +4,10 @@ import { sign } from 'jsonwebtoken';
 import { Collection, ObjectId } from 'mongodb';
 import request from 'supertest';
 
-import { IAddSurveyDto } from '../../domain/interfaces/usecases/survey/add-survey.interface';
 import { MongoHelper } from '../../infra/database/mongodb/helper/mongo.helper';
+import { correctSurveyHttpRequest } from '../../utils/constant/mock.constant';
 import app from '../config/app';
 import env from '../config/env';
-
-const surveyData: IAddSurveyDto = {
-	question: 'any_question',
-	answers: [{ image: 'Image 1', answer: 'Answer 1' }, { answer: 'Answer 2' }],
-};
 
 const secretSecretKey = env.JWT_SECRET_KEY;
 
@@ -52,22 +47,18 @@ describe('Survey Routes', () => {
 				{ $set: { accessToken } }
 			);
 
-			await request(app).post('/api/surveys')
+			await request(app)
+				.post('/api/surveys')
 				.set('x-access-token', accessToken)
-				.send(surveyData)
+				.send(correctSurveyHttpRequest.body)
 				.expect(204);
 		});
 	});
 
 	describe('POST /surveys', () => {
 		test('Should return 403 on surveys', async () => {
-			const surveyData: IAddSurveyDto = {
-				question: 'any_question',
-				answers: [{ image: 'Image 1', answer: 'Answer 1' }, { answer: 'Answer 2' }],
-			};
-
 			await request(app).post('/api/surveys')
-				.send(surveyData)
+				.send(correctSurveyHttpRequest.body)
 				.expect(403);
 		});
 	});
