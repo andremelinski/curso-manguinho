@@ -10,6 +10,19 @@ const fakeSurveyData: IAddSurveyDto = {
 	date: new Date(),
 };
 
+const fakeSurveyDataArr: IAddSurveyDto[] = [
+	{
+		question: 'valid_question',
+		answers: [{ image: 'any_image', answer: 'any_answer' }, { answer: 'any_answer2' }],
+		date: new Date(),
+	},
+	{
+		question: 'valid_question2',
+		answers: [{ image: 'any_image3', answer: 'any_answer3' }, { answer: 'any_answer4' }],
+		date: new Date(),
+	},
+];
+
 
 interface SutTypes {
 	sut: SurveyMongoRepository;
@@ -45,5 +58,16 @@ describe('Survey Mongo Repository', () => {
 		const surveyCount = await surveyCollection.countDocuments();
 
 		expect(surveyCount).toBeGreaterThan(0);
+	});
+	test('Should load all surveys on success', async () => {
+		await surveyCollection.insertMany(fakeSurveyDataArr);
+		const surveys = await sut.loadAll();
+
+		expect(surveys.length).toBeGreaterThan(0);
+	});
+	test('Should load empty list', async () => {
+		const surveys = await sut.loadAll();
+
+		expect(surveys.length).toEqual(0);
 	});
 });

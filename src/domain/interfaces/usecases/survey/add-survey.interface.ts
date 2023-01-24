@@ -1,7 +1,5 @@
-export interface SurveyAnswerDto {
-    image?: string;
-    answer: string;
-}
+import { SurveyAnswerDto } from '../../model/survey-model-interface';
+
 
 export interface IAddSurveyDto {
 	question: string;
