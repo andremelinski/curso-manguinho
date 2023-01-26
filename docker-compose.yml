@@ -1,18 +1,20 @@
 version: '3.7'
 
 services:
-    # ts-node:
-    #     container_name: ts-node
-    #     build:
-    #         context: .
-    #         target: development
-    #         dockerfile: Dockerfile
-    #     ports:
-    #         - '5050:5050'
-    #     volumes:
-    #         - ./src:/home/node/app/src
-    #         - ./nodemon.json:/home/node/app/nodemon.json
-    #     entrypoint: sh -c "npm run start:dev"
+    ts-node:
+        container_name: ts-node
+        build:
+            context: .
+            target: development
+            dockerfile: Dockerfile
+        ports:
+            - '5050:5050'
+        volumes:
+            - ./src:/home/node/app/src
+            - ./nodemon.json:/home/node/app/nodemon.json
+        environment:
+          - MONGO_URL=mongodb://admin:admin@db:27017/course-goals?authSource=admin
+        entrypoint: sh -c "npm run start:dev"
     db:
       container_name: mongoDB
       image: mongo:latest

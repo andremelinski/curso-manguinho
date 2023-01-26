@@ -1,11 +1,7 @@
-import { SurveyAnswerDto } from '../../model/survey-model-interface';
+import { ISurveyModel } from '../../model/survey-model-interface';
 
+export type IAddSurveyDto = Omit<ISurveyModel, 'id'>
 
-export interface IAddSurveyDto {
-	question: string;
-	answers: SurveyAnswerDto[];
-	date: Date;
-}
 
 export interface IAddSurvey {
     add(data: IAddSurveyDto): Promise<void>
