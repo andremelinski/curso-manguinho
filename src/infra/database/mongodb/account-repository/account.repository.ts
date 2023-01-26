@@ -38,7 +38,7 @@ implements
 		);
 	}
 
-	async loadByToken(userId: string, role?: string): Promise<IAccountModel> {
+	async loadById(userId: string, role?: string): Promise<IAccountModel> {
 		const accountCollection = await MongoHelper.getCollection('accounts');
 
 		const account = await accountCollection.findOne({ _id: new ObjectId(userId), role });

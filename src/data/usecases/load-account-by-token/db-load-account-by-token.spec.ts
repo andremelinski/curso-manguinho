@@ -17,7 +17,7 @@ const fakeAccount = {
 
 const makeLoadAccountByTokenRepository = (): ILoadAccountByTokenRepository => {
 	return new (class LoadAccountByTokenRepositoryStub implements ILoadAccountByTokenRepository {
-		loadByToken(token: string, role?: string): Promise<IAccountModel> {
+		loadById(token: string, role?: string): Promise<IAccountModel> {
 			return new Promise((resolve) => {
 				return resolve(fakeAccount);
 			});
@@ -74,7 +74,7 @@ describe('DbLoadAccountByToken Usecase', () => {
 		expect(accountWithRole).toBeNull();
 	});
 	test('Should call loadAccountByToken when token exists', async () => {
-		const loadAccountByTokenStubSpy = jest.spyOn(loadAccountByTokenStub, 'loadByToken');
+		const loadAccountByTokenStubSpy = jest.spyOn(loadAccountByTokenStub, 'loadById');
 
 		await sut.load(accessToken, role);
 
@@ -87,7 +87,7 @@ describe('DbLoadAccountByToken Usecase', () => {
 		);
 	});
 	test('Should return null if loadAccountByToken return null', async () => {
-		jest.spyOn(loadAccountByTokenStub, 'loadByToken').mockResolvedValue(Promise.resolve(null));
+		jest.spyOn(loadAccountByTokenStub, 'loadById').mockResolvedValue(Promise.resolve(null));
 
 		const account = await sut.load(accessToken);
 
