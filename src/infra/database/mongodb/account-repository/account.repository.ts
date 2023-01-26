@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 
 import { IAddAccountRepository } from '../../../../data/interfaces/db/addAccountRepository.interface';
 import { ILoadAccountByEmailRepository } from '../../../../data/interfaces/db/loadAccountByEmailRepository.interface';
-import { ILoadAccountByTokenRepository } from '../../../../data/interfaces/db/loadAccountByTokenRepository.interface';
+import { ILoadAccountByIdRepository } from '../../../../data/interfaces/db/loadAccountByIdRepository.interface';
 import { IUpdateAccessTokenRepository } from '../../../../data/interfaces/db/updateAccessTokenRepository.interface';
 import { IAccountModel } from '../../../../domain/interfaces/model/accountModel.interfae';
 import { IAddAccountDto } from '../../../../domain/interfaces/usecases/addAccount.interface';
@@ -13,7 +13,7 @@ implements
 		IAddAccountRepository,
 		ILoadAccountByEmailRepository,
 		IUpdateAccessTokenRepository,
-		ILoadAccountByTokenRepository {
+		ILoadAccountByIdRepository {
 	async add(accountInfo: IAddAccountDto): Promise<IAccountModel> {
 		const accountCollection = await MongoHelper.getCollection('accounts');
 

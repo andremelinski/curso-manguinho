@@ -1,7 +1,7 @@
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-classes-per-file */
 import { IDecrypter } from '../../interfaces/criptography/token/encrypterComparer.interface';
-import { ILoadAccountByTokenRepository } from '../../interfaces/db/loadAccountByTokenRepository.interface';
+import { ILoadAccountByIdRepository } from '../../interfaces/db/loadAccountByIdRepository.interface';
 import DbLoadAccountByToken from './db-load-account-by-token';
 import { IAccountModel } from './db-load-account-by-token-protocols';
 
@@ -15,8 +15,8 @@ const fakeAccount = {
 	password: 'hashed_password',
 };
 
-const makeLoadAccountByTokenRepository = (): ILoadAccountByTokenRepository => {
-	return new (class LoadAccountByTokenRepositoryStub implements ILoadAccountByTokenRepository {
+const makeLoadAccountByTokenRepository = (): ILoadAccountByIdRepository => {
+	return new (class LoadAccountByTokenRepositoryStub implements ILoadAccountByIdRepository {
 		loadById(token: string, role?: string): Promise<IAccountModel> {
 			return new Promise((resolve) => {
 				return resolve(fakeAccount);
@@ -36,7 +36,7 @@ const makeDecrypter = (): IDecrypter => {
 
 interface SutTypes {
 	sut: DbLoadAccountByToken;
-	loadAccountByTokenStub: ILoadAccountByTokenRepository;
+	loadAccountByTokenStub: ILoadAccountByIdRepository;
 	decrypterStub: IDecrypter;
 }
 
@@ -50,7 +50,7 @@ const makeSut = (): SutTypes => {
 
 describe('DbLoadAccountByToken Usecase', () => {
 	let sut: DbLoadAccountByToken;
-	let loadAccountByTokenStub: ILoadAccountByTokenRepository;
+	let loadAccountByTokenStub: ILoadAccountByIdRepository;
 	let decrypterStub: IDecrypter;
 
 	beforeEach(() => {
