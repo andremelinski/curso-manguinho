@@ -9,3 +9,11 @@ export interface ISurveyModel {
 	answers: SurveyAnswerDto[];
 	date: Date;
 }
+
+export interface ISurveyResultModel {
+	id: string;
+	surveyId: string;
+	accountId: string;
+	answer: string;
+	date: Date;
+}
