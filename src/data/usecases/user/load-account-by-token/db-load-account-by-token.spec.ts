@@ -1,10 +1,8 @@
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-classes-per-file */
-import { IDecrypter } from '../../interfaces/criptography/token/encrypterComparer.interface';
-import { ILoadAccountByIdRepository } from '../../interfaces/db/loadAccountByIdRepository.interface';
+import { IDecrypter } from '../../../interfaces/criptography/token/encrypterComparer.interface';
 import DbLoadAccountByToken from './db-load-account-by-token';
-import { IAccountModel } from './db-load-account-by-token-protocols';
-
+import { IAccountModel, ILoadAccountByIdRepository } from './db-load-account-by-token-protocols';
 
 const accessToken = 'any-token';
 const role = 'any_role';

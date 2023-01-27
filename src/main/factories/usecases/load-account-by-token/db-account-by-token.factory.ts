@@ -1,4 +1,4 @@
-import DbLoadAccountByToken from '../../../../data/usecases/load-account-by-token/db-load-account-by-token';
+import DbLoadAccountByToken from '../../../../data/usecases/user/load-account-by-token/db-load-account-by-token';
 import JwtAdapter from '../../../../infra/criptograph/jwt-adapter/jwt-adapter';
 import AccountMongoRepository from '../../../../infra/database/mongodb/account-repository/account.repository';
 import env from '../../../config/env';

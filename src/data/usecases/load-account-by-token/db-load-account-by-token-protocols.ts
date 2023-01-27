@@ -1,1 +1,0 @@
-export * from '../../../domain/interfaces/model/accountModel.interfae';

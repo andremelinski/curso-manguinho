@@ -1,7 +1,6 @@
-import { ILoadAccountByToken } from '../../../domain/interfaces/usecases/middleware/load-by-token.interface';
-import { IDecrypter } from '../../interfaces/criptography/token/encrypterComparer.interface';
-import { ILoadAccountByIdRepository } from '../../interfaces/db/loadAccountByIdRepository.interface';
-import { IAccountModel } from './db-load-account-by-token-protocols';
+import { IDecrypter } from '../../../interfaces/criptography/token/encrypterComparer.interface';
+import { IAccountModel, ILoadAccountByIdRepository, ILoadAccountByToken } from './db-load-account-by-token-protocols';
+
 
 export default class DbLoadAccountByToken implements ILoadAccountByToken {
 	constructor(
