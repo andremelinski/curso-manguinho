@@ -1,6 +1,6 @@
-import { ILoadSurveyById } from '../../../../domain/interfaces/usecases/survey/load-surveys.interface';
 import DbLoadSurveyById from './db-load-survey-by-id';
-import { ISurveyModel } from './db-load-survey-by-id.protocols';
+import { ILoadSurveyById, ISurveyModel } from './db-load-survey-by-id.protocols';
+
 
 const fakeSurvey: ISurveyModel = {
 	id: 'valid_id',

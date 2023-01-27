@@ -3,7 +3,7 @@ import { sign } from 'jsonwebtoken';
 import { Collection, ObjectId } from 'mongodb';
 import request from 'supertest';
 
-import { IAddSurveyDto } from '../../data/usecases/add-survey/db-add-survey-protocols';
+import { IAddSurveyDto } from '../../data/usecases/survey/add-survey/db-add-survey-protocols';
 import { MongoHelper } from '../../infra/database/mongodb/helper/mongo.helper';
 import { HttpReponse } from '../../presentation/http';
 import { correctSurveyHttpRequest } from '../../utils/constant/mock.constant';
