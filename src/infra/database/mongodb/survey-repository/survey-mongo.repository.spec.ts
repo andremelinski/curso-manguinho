@@ -70,4 +70,11 @@ describe('Survey Mongo Repository', () => {
 
 		expect(surveys.length).toEqual(0);
 	});
+	test('Should find a survey by id', async () => {
+		const survey = await surveyCollection.insertOne(fakeSurveyDataArr[0]);
+		const surveyFound = await sut.loadById(survey.insertedId.toString());
+
+		expect(surveyFound).toBeTruthy();
+		expect(surveyFound.id).toBeTruthy();
+	});
 });

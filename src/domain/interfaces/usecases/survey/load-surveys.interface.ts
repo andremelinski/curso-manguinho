@@ -4,6 +4,6 @@ export interface ILoadSurveys {
 	load(): Promise<ISurveyModel[]>;
 }
 
-export interface ILoadByIdSurveys {
-	loadById(): Promise<ISurveyModel>;
+export interface ILoadSurveyById {
+	loadById(id: string): Promise<ISurveyModel>;
 }
