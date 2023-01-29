@@ -5,13 +5,6 @@ import { badRequest, noContent, serverError } from '../../../helper/http-helper'
 import { HttpReponse, IAddSurvey, IAddSurveyDto, IValidation } from './add-surver-protocols';
 import AddSurveyController from './add-survey.controller';
 
-
-// const fakeSurvey = {
-// 	id: 'valid_id',
-// 	question: 'valid_question',
-// 	answer: 'valid_answer',
-// };
-
 jest.useFakeTimers().setSystemTime(new Date());
 
 const makeValidation = (): IValidation => {

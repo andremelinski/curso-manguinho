@@ -4,8 +4,8 @@ export type IAddSurveyDto = Omit<ISurveyModel, 'id'>
 export interface IAddSurvey {
     add(data: IAddSurveyDto): Promise<void>
 }
-// TODO: create save logic
-export type IAddSurveyResultDto = Omit<ISurveyResultModel, 'id'>;
-export interface ISaveSurveyModel {
-	save(data: IAddSurveyResultDto): Promise<ISurveyResultModel>;
+
+export type ISaveSurveyResultDto = Omit<ISurveyResultModel, 'id'>;
+export interface ISaveSurveyResult {
+	save(data: ISaveSurveyResultDto): Promise<ISurveyResultModel>;
 }
