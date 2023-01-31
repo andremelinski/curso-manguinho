@@ -26,4 +26,17 @@ export const MongoHelper = {
 
 		return { ...userInfoWithoutId, id: _id };
 	},
+	// eslint-disable-next-line consistent-return
+	async connectToCollections(collection: string): Promise<Collection> | undefined {
+		const collectionSet = collection;
+		const collectionArr = ['surveys', 'accounts', 'surveyResults'];
+
+		if (collectionArr.find((el) => {
+			return el === collectionSet;
+		})) {
+			const collectionConnected = await this.getCollection(collection);
+
+			return collectionConnected;
+		}
+	},
 };

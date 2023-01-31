@@ -1,8 +1,18 @@
+/* eslint-disable max-nested-callbacks */
 import { Collection } from 'mongodb';
 
+import { IAddAccountDto } from '../../../../domain/interfaces/usecases/addAccount.interface';
 import { IAddSurveyDto } from '../../../../domain/interfaces/usecases/survey/add-survey.interface';
 import { MongoHelper } from '../helper/mongo.helper';
 import SurveyMongoRepository from './survey-mongo.repository';
+
+const accountData = (): IAddAccountDto => {
+	return {
+		name: 'valid_name',
+		email: 'valid_email',
+		password: 'hashed_password',
+	};
+};
 
 const fakeSurveyData: IAddSurveyDto = {
 	question: 'any_question',
@@ -23,7 +33,6 @@ const fakeSurveyDataArr: IAddSurveyDto[] = [
 	},
 ];
 
-
 interface SutTypes {
 	sut: SurveyMongoRepository;
 }
@@ -36,6 +45,8 @@ const makeSut = (): SutTypes => {
 describe('Survey Mongo Repository', () => {
 	let sut: SurveyMongoRepository;
 	let surveyCollection: Collection;
+	let surveyResultCollection: Collection;
+	let accountCollection: Collection;
 
 	beforeAll(async () => {
 		await MongoHelper.connect(process.env.MONGO_URL);
@@ -43,8 +54,11 @@ describe('Survey Mongo Repository', () => {
 
 	beforeEach(async () => {
 		surveyCollection = await MongoHelper.getCollection('surveys');
-
+		surveyResultCollection = await MongoHelper.getCollection('surveyResults');
+		accountCollection = await MongoHelper.getCollection('accounts');
 		await surveyCollection.deleteMany({});
+		await surveyResultCollection.deleteMany({});
+		await accountCollection.deleteMany({});
 
 		({ sut } = makeSut());
 	});
@@ -76,5 +90,50 @@ describe('Survey Mongo Repository', () => {
 
 		expect(surveyFound).toBeTruthy();
 		expect(surveyFound.id).toBeTruthy();
+	});
+	describe('save()', () => {
+		test('Should add a survey result if its new', async () => {
+			const { insertedId: accountId } = await accountCollection.insertOne(accountData());
+			const fakeSurvey = fakeSurveyDataArr[0];
+			const { insertedId: surveyId } = await surveyCollection.insertOne(fakeSurvey);
+
+			const [{ answer }] = fakeSurvey.answers;
+			const surveyResult = await sut.save({
+				surveyId: surveyId.toString(),
+				accountId: accountId.toString(),
+				answer,
+				date: new Date(),
+			});
+
+			expect(surveyResult).toBeTruthy();
+			expect(surveyResult.id).toBeTruthy();
+			expect(surveyResult.answer).toEqual(answer);
+		});
+		test('Should update a survey result if already exist', async () => {
+			const { insertedId: accountId } = await accountCollection.insertOne(
+				accountData()
+			);
+			const fakeSurvey = fakeSurveyDataArr[0];
+			const { insertedId: surveyId } = await surveyCollection.insertOne(fakeSurvey);
+
+			const [{ answer }, { answer: answer2 }] = fakeSurvey.answers;
+
+			await sut.save({
+				surveyId: surveyId.toString(),
+				accountId: accountId.toString(),
+				answer,
+				date: new Date(),
+			});
+			const surveyResult = await sut.save({
+				surveyId: surveyId.toString(),
+				accountId: accountId.toString(),
+				answer: answer2,
+				date: new Date(),
+			});
+
+			expect(surveyResult).toBeTruthy();
+			expect(surveyResult.id).toBeTruthy();
+			expect(surveyResult.answer).toEqual(answer2);
+		});
 	});
 });
