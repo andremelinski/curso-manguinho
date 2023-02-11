@@ -24,7 +24,12 @@ export const MongoHelper = {
 	mapper(collectionInfo: any) {
 		const { _id, ...userInfoWithoutId } = collectionInfo;
 
-		return { ...userInfoWithoutId, id: _id };
+		return { ...userInfoWithoutId, id: _id.toString() };
+	},
+	mapCollection(collectionArr: any[]): any[] {
+		return collectionArr.map((collection) => {
+			return this.mapper(collection);
+		});
 	},
 	// eslint-disable-next-line consistent-return
 	async connectToCollections(collection: string): Promise<Collection> | undefined {

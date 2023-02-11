@@ -20,7 +20,7 @@ implements IAddSurveyRepository, ILoadSurveyRepository, ILoadSurveyById {
 		const surveyCollection = await MongoHelper.connectToCollections('surveys');
 		const surveys: any = await surveyCollection.find({}).toArray();
 
-		return surveys;
+		return surveys && MongoHelper.mapCollection(surveys);
 	}
 
 	async loadById(surveyId: string): Promise<ISurveyModel> {

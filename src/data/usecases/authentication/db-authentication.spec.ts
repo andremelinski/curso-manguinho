@@ -91,7 +91,7 @@ const makeSut = (): SutTypes => {
 	};
 };
 
-describe('DbAddAccount UseCase', () => {
+describe('DbAuthentication UseCase', () => {
 	let sut: DbAuthentication;
 	let loadAccountByEmailRepositoryStub: ILoadAccountByEmailRepository;
 	let updateAccessTokenRepositoryStub: IUpdateAccessTokenRepository;
