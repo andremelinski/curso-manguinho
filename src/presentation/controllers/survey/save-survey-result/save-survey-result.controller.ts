@@ -1,7 +1,13 @@
 import { InvalidParamError } from '../../../errors';
-import { forbidden, ok } from '../../../helper/http-helper';
+import { forbidden, ok, serverError } from '../../../helper/http-helper';
 import { IController } from '../../../http/controller.interface';
-import { HttpReponse, HttpRequest, ILoadSurveyById, ISaveSurveyResult } from './save-survey-result.protocols';
+import {
+	HttpReponse,
+	HttpRequest,
+	ILoadSurveyById,
+	ISaveSurveyResult,
+	ISaveSurveyResultDto,
+} from './save-survey-result.protocols';
 
 export default class SaveSurveyResultController implements IController {
 	constructor(
@@ -10,13 +16,35 @@ export default class SaveSurveyResultController implements IController {
 	) {}
 
 	async handle(httpRequest: HttpRequest): Promise<HttpReponse> {
-		const { surveyId } = httpRequest.params;
-		const survey = await this.surveyRepo.loadById(surveyId);
+		try {
+			const { surveyId } = httpRequest.params;
+			const survey = await this.surveyRepo.loadById(surveyId);
 
-		if (survey) {
-			// this.surveyResultRepo.save();
-			return ok('ok');
+			if (survey) {
+				const { answer } = httpRequest.body;
+
+				const answerExist = survey.answers.some(el => {
+					return el.answer === answer;
+				});
+
+				if (!answerExist) {
+					return forbidden(new InvalidParamError('answer'));
+				}
+
+				const { accountId } = httpRequest;
+				const saveSurveyResultDto: ISaveSurveyResultDto = {
+					surveyId: survey.id,
+					accountId,
+					answer,
+					date: new Date(),
+				};
+
+				this.surveyResultRepo.save(saveSurveyResultDto);
+				return ok('ok');
+			}
+			return forbidden(new InvalidParamError('survey_id'));
+		} catch (error) {
+			return serverError(error);
 		}
-		return forbidden(new InvalidParamError('survey_id'));
 	}
 }
