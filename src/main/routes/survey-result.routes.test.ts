@@ -1,5 +1,6 @@
 /* eslint-disable max-nested-callbacks */
-import { Collection } from 'mongodb';
+import { sign } from 'jsonwebtoken';
+import { Collection, ObjectId } from 'mongodb';
 import request from 'supertest';
 
 import { IAddSurveyDto } from '../../data/usecases/survey/add-survey/db-add-survey-protocols';
@@ -42,28 +43,24 @@ describe('Survey Routes', () => {
 	});
 
 	describe('PUT /surveys/:surveyId/results', () => {
-		// test('Should return 204 on save survey result with correct token', async () => {
-		// 	const adminAccountData = {
-		// 		...accountData,
-		// 		role: 'admin',
-		// 	};
+		test('Should return 204 on surveys', async () => {
+			const { insertedId } = await accountCollection.insertOne(accountData);
+			const accessToken = sign({ id: insertedId }, secretSecretKey);
 
-		// 	const { insertedId } = await accountCollection.insertOne(adminAccountData);
-		// 	const accessToken = sign({ id: insertedId }, secretSecretKey);
+			await accountCollection.updateOne({ _id: new ObjectId(insertedId) }, { $set: { accessToken } });
+			const survey = await surveyCollection.insertOne(fakeSurveyData);
 
-		// 	await accountCollection.updateOne(
-		// 		{ _id: new ObjectId(insertedId) },
-		// 		{ $set: { accessToken } }
-		// 	);
+			const surveyResult = await request(app)
+				.put(`/api/surveys/${survey.insertedId.toString()}/results`)
+				.set('x-access-token', accessToken)
+				.send({ answer: 'any_answer1' });
 
-		// 	const survey = await surveyCollection.insertOne(fakeSurveyData);
-
-		// 	console.log(survey.insertedId.toString());
-		// 	await request(app).put(`/api/surveys/${survey.insertedId.toString()}/results`)
-		// 		.set('x-access-token', accessToken)
-		// 		.send({ answer: 'answer' })
-		// 		.expect(204);
-		// });
+			expect(surveyResult.statusCode).toEqual(200);
+			expect(surveyResult.body).toHaveProperty('accountId');
+			expect(surveyResult.body).toHaveProperty('surveyId');
+			expect(surveyResult.body).toHaveProperty('answer');
+			expect(surveyResult.body).toHaveProperty('id');
+		});
 		test('Should return 403 on save survey result without accessToken', async () => {
 			await request(app)
 				.put('/api/surveys/any_id/results')

@@ -25,9 +25,9 @@ implements IAddSurveyRepository, ILoadSurveyRepository, ILoadSurveyById {
 
 	async loadById(surveyId: string): Promise<ISurveyModel> {
 		const surveyCollection : Collection = await MongoHelper.connectToCollections('surveys');
-		const surveys: any = await surveyCollection.findOne({ _id: new ObjectId(surveyId) });
+		const survey: any = await surveyCollection.findOne({ _id: new ObjectId(surveyId) });
 
-		return surveys && MongoHelper.mapper(surveys);
+		return survey && MongoHelper.mapper(survey);
 	}
 
 	async save(data: ISaveSurveyResultDto): Promise<ISurveyResultModel> {

@@ -17,7 +17,6 @@ export class SaveSurveyResultController implements IController {
 
 	async handle(httpRequest: HttpRequest): Promise<HttpReponse> {
 		try {
-			// console.log({ httpRequest });
 			const { surveyId } = httpRequest.params;
 			const survey = await this.surveyRepo.loadById(surveyId);
 
@@ -40,12 +39,13 @@ export class SaveSurveyResultController implements IController {
 					date: new Date(),
 				};
 
-				this.surveyResultRepo.save(saveSurveyResultDto);
-				return ok('ok');
+				const savedResult = await this.surveyResultRepo.save(saveSurveyResultDto);
+
+				return ok(savedResult);
 			}
 			return forbidden(new InvalidParamError('survey_id'));
 		} catch (error) {
-			// console.error(error);
+			console.error(error);
 			return serverError(error);
 		}
 	}
