@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { InvalidParamError } from '../../../errors/invalid-params.erros';
 import { forbidden, serverError } from '../../../helper/http-helper';
-import SaveSurveyResultController from './save-survey-result.controller';
+import { SaveSurveyResultController } from './save-survey-result.controller';
 import {
 	HttpRequest,
 	ILoadSurveyById,

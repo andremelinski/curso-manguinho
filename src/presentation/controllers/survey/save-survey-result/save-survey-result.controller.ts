@@ -9,7 +9,7 @@ import {
 	ISaveSurveyResultDto,
 } from './save-survey-result.protocols';
 
-export default class SaveSurveyResultController implements IController {
+export class SaveSurveyResultController implements IController {
 	constructor(
 		private readonly surveyRepo: ILoadSurveyById,
 		private readonly surveyResultRepo: ISaveSurveyResult
@@ -17,6 +17,7 @@ export default class SaveSurveyResultController implements IController {
 
 	async handle(httpRequest: HttpRequest): Promise<HttpReponse> {
 		try {
+			// console.log({ httpRequest });
 			const { surveyId } = httpRequest.params;
 			const survey = await this.surveyRepo.loadById(surveyId);
 
@@ -44,6 +45,7 @@ export default class SaveSurveyResultController implements IController {
 			}
 			return forbidden(new InvalidParamError('survey_id'));
 		} catch (error) {
+			// console.error(error);
 			return serverError(error);
 		}
 	}
