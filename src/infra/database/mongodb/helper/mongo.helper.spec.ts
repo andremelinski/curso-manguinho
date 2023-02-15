@@ -1,7 +1,6 @@
 /* eslint-disable max-nested-callbacks */
 import { MongoHelper as sut } from './mongo.helper';
 
-// a
 describe('Mongohelper', () => {
 	beforeAll(async () => {
 		await sut.connect(process.env.MONGO_URL);
