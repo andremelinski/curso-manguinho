@@ -1,7 +1,6 @@
 import { Collection, MongoClient } from 'mongodb';
 
 export const MongoHelper = {
-	// passing null as first time type, then changing to MongoClient
 	connection: null as MongoClient,
 	uri: null as string,
 	async connect(uri: string): Promise<void> {
