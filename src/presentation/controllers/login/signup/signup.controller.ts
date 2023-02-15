@@ -28,6 +28,7 @@ export class SignUpController implements IController {
 				password,
 			});
 
+			// s
 			if (!newAccount) {
 				return forbidden(new EmailInUseError(email));
 			}
