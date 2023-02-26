@@ -1,7 +1,6 @@
-import { loginPath } from './paths/login-path';
-import { accountSchema } from './schemas/account-schema';
-import { loginParamsSchema } from './schemas/login-params-schema';
-import { unauthorizedSchema } from './schemas/unauthorized.schema';
+import { badRequest, notFound, serverError, unauthorized } from './components';
+import { loginPath } from './paths';
+import { accountSchema, errorSchema, loginParamsSchema } from './schemas';
 
 export default {
 	openapi: '3.0.0',
@@ -10,6 +9,10 @@ export default {
 		description: 'API do cursso do manguinho',
 		version: '1.0.0',
 	},
+	// license: {
+	// 	name: '',
+	// 	url: ''
+	// },
 	servers: [
 		{
 			url: '/api',
@@ -18,5 +21,6 @@ export default {
 	],
 	tags: [{ name: 'Login' }],
 	paths: { '/login': loginPath },
-	schemas: { account: accountSchema, loginParams: loginParamsSchema, unauthorized: unauthorizedSchema },
+	schemas: { account: accountSchema, loginParams: loginParamsSchema, error: errorSchema },
+	components: { badRequest, unauthorized, serverError, notFound },
 };
