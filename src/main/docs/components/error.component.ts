@@ -14,3 +14,8 @@ export const unauthorized = {
 };
 
 export const notFound = { description: 'Endpoint Not Found' };
+
+export const forbidden = {
+	description: 'Forbidden Access',
+	content: { 'application/json': { schema: { $ref: '#/schemas/error' } } },
+};
